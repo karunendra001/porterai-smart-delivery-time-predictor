@@ -1,0 +1,1 @@
+{"name":"porterai-smart-delivery-time-predictor","version":"1.0.0","description":"Porter AI Logistics Dashboard","main":"server.js","scripts":{"start":"node server.js"},"author":"","license":"ISC"}

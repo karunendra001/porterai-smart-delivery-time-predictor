@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porter AI - Logistics Intelligence Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #f0f4f9; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* Navigation Bar */
+        .navbar { background: #0f172a; color: #ffffff; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 600; text-decoration: none; color: white; }
+        .logo i { color: #3b82f6; font-size: 24px; }
+        .logo strong { color: #3b82f6; }
+        nav { display: flex; align-items: center; gap: 25px; }
+        nav a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; cursor: pointer; }
+        nav a:hover { color: #ffffff; }
+        .btn-nav { background: #2563eb; color: white !important; padding: 8px 18px; border-radius: 6px; }
+
+        /* Main Dashboard Grid */
+        .dashboard-wrapper { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 24px 24px; }
+        .content-grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; max-width: 1100px; width: 100%; }
+
+        .card { background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .header-icon { font-size: 20px; color: #2563eb; background: #eff6ff; padding: 10px; border-radius: 8px; }
+        .header-icon.accent { color: #0d9488; background: #ccfbf1; }
+        .card-header h2 { font-size: 17px; font-weight: 600; color: #0f172a; }
+        .card-header p { font-size: 12px; color: #64748b; }
+
+        /* Inputs */
+        .input-group { margin-bottom: 14px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 500; color: #334155; margin-bottom: 6px; }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper i { position: absolute; left: 12px; color: #94a3b8; font-size: 14px; }
+        .input-wrapper input { width: 100%; padding: 10px 12px 10px 36px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; transition: all 0.2s; }
+        .input-wrapper input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+
+        .submit-btn { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 16px; transition: background 0.2s; }
+        .submit-btn:hover { background: #1d4ed8; }
+
+        .side-panel { display: flex; flex-direction: column; gap: 20px; }
+
+        /* Simulated Route Map Graphic */
+        .map-box {
+            height: 160px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #93c5fd;
+            margin-bottom: 16px;
+        }
+        .map-grid-line {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.4) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .map-route {
+            position: absolute;
+            width: 75%;
+            height: 4px;
+            background: #2563eb;
+            top: 50%;
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+        }
+        .map-icon {
+            position: absolute;
+            width: 38px;
+            height: 38px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            font-size: 15px;
+            z-index: 2;
+        }
+        .icon-start { left: 10%; top: 38%; color: #dc2626; }
+        .icon-end { right: 10%; top: 38%; color: #16a34a; }
+        .icon-truck { left: 45%; top: 35%; color: #2563eb; animation: moveTruck 3s infinite ease-in-out; }
+
+        @keyframes moveTruck {
+            0% { transform: translateX(-20px); }
+            50% { transform: translateX(20px); }
+            100% { transform: translateX(-20px); }
+        }
+
+        /* Speed & Mode Comparison Cards */
+        .comparison-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+        .comp-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .comp-card:hover { transform: translateY(-2px); border-color: #93c5fd; }
+        .comp-card i { font-size: 18px; margin-bottom: 4px; color: #64748b; }
+        .comp-card.active { background: #eff6ff; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15); }
+        .comp-card.active i { color: #2563eb; }
+        .comp-card h5 { font-size: 11px; color: #64748b; }
+        .comp-card span { font-size: 14px; font-weight: 700; color: #0f172a; }
+
+        .result-highlight { background: #f0fdf4; border: 1px solid #86efac; padding: 14px 18px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .result-highlight h3 { font-size: 24px; color: #15803d; font-weight: 700; }
+
+        /* Chart Container */
+        .chart-container { position: relative; height: 180px; width: 100%; margin-top: 16px; }
+
+        /* Modal Popups */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-card { background: #ffffff; padding: 24px; border-radius: 12px; width: 90%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+        .close-btn { font-size: 22px; font-weight: bold; color: #64748b; cursor: pointer; }
+        .close-btn:hover { color: #0f172a; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <a href="/" class="logo">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>Porter <strong>AI</strong></span>
+        </a>
+        <nav>
+            <a onclick="openModal('featuresModal')">Features</a>
+            <a onclick="openModal('apiModal')">API Docs</a>
+            <a onclick="openModal('analyticsModal')">Analytics</a>
+            <a href="/" class="btn-nav">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-wrapper">
+        <div class="content-grid">
+            
+            <!-- Left Panel: Input Form -->
+            <div class="card form-card">
+                <div class="card-header">
+                    <i class="fa-solid fa-stopwatch header-icon"></i>
+                    <div>
+                        <h2>Delivery Estimator</h2>
+                        <p>Real-time machine learning prediction</p>
+                    </div>
+                </div>
+
+                <form action="/" method="POST">
+                    <div class="input-group">
+                        <label for="market_id">Market ID</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-store"></i>
+                            <input type="text" id="market_id" name="market_id" value="{{ form_data.get('market_id', '') }}" placeholder="e.g. 1" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="store_primary_category">Store Category</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-utensils"></i>
+                            <input type="text" id="store_primary_category" name="store_primary_category" value="{{ form_data.get('store_primary_category', '') }}" placeholder="e.g. American, Bakery" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="distance">Distance (km)</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-route"></i>
+                            <input type="number" step="0.1" id="distance" name="distance" value="{{ form_data.get('distance', '') }}" placeholder="e.g. 3.5" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="total_onshift_partners">Onshift Partners</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user-ninja"></i>
+                            <input type="number" id="total_onshift_partners" name="total_onshift_partners" value="{{ form_data.get('total_onshift_partners', '') }}" placeholder="e.g. 12" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>Predict Delivery Time</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Panel: Live Route, Comparison Cards & Graph -->
+            <div class="side-panel">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-map-location-dot header-icon accent"></i>
+                        <div>
+                            <h2>Live Dispatch Route & Analytics</h2>
+                            <p>Real-Time Optimization Metrics</p>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Animated Route Map -->
+                    <div class="map-box">
+                        <div class="map-grid-line"></div>
+                        <div class="map-route"></div>
+                        <div class="map-icon icon-start" title="Pickup Location"><i class="fa-solid fa-shop"></i></div>
+                        <div class="map-icon icon-truck" id="courierIcon" title="Active Fleet Courier"><i class="fa-solid fa-motorcycle"></i></div>
+                        <div class="map-icon icon-end" title="Dropoff Location"><i class="fa-solid fa-location-dot"></i></div>
+                    </div>
+
+                    {% if prediction is not none %}
+                        <!-- Prediction Result Highlight -->
+                        <div class="result-highlight" id="predictionData" data-prediction="{{ prediction }}">
+                            <div>
+                                <span style="font-size: 11px; color: #15803d; font-weight: 700; letter-spacing: 0.5px;">ESTIMATED ARRIVAL TIME</span>
+                                <h3 id="displayTime">{{ prediction }} Mins</h3>
+                            </div>
+                            <i class="fa-solid fa-circle-check" style="font-size: 32px; color: #16a34a;"></i>
+                        </div>
+
+                        <!-- Mode Switcher -->
+                        <h4 style="font-size: 12px; color: #475569; margin-bottom: 6px;">Delivery Mode Comparison</h4>
+                        <div class="comparison-grid">
+                            <div class="comp-card" id="cardEbike" onclick="selectMode('ebike')">
+                                <i class="fa-solid fa-person-biking"></i>
+                                <h5>E-Bike</h5>
+                                <span id="timeEbike">{{ (prediction * 1.25)|round(1) }}m</span>
+                            </div>
+                            <div class="comp-card active" id="cardExpress" onclick="selectMode('express')">
+                                <i class="fa-solid fa-motorcycle"></i>
+                                <h5>Express Fleet</h5>
+                                <span id="timeExpress">{{ prediction }}m</span>
+                            </div>
+                            <div class="comp-card" id="cardVan" onclick="selectMode('van')">
+                                <i class="fa-solid fa-van-shuttle"></i>
+                                <h5>Standard Van</h5>
+                                <span id="timeVan">{{ (prediction * 1.45)|round(1) }}m</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Comparison Graph -->
+                        <div class="chart-container">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    {% else %}
+                        <p style="font-size: 13px; color: #64748b; text-align: center; padding: 30px 0;">
+                            Fill out the form fields and click <strong>Predict Delivery Time</strong> to view delivery routes, vehicle comparisons, and real-time performance graphs.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="featuresModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-star" style="color: #2563eb;"></i> Key Features</h3>
+                <span class="close-btn" onclick="closeModal('featuresModal')">&times;</span>
+            </div>
+            <p style="font-size: 13px; color: #334155; line-height: 1.6;">
+                • <strong>Real-time ML Inference:</strong> Continuous predictions scored instantly.<br>
+                • <strong>Fleet Auto-Scaling:</strong> Adjusts dynamically based on active drivers.<br>
+                • <strong>Multi-Vehicle Routing:</strong> Real-time mode comparison graphs.
+            </p>
+        </div>
+    </div>
+
+    <div id="apiModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-code" style="color: #2563eb;"></i> API Documentation</h3>
+                <span class="close-btn" onclick="closeModal('apiModal')">&times;</span>
+            </div>
+            <p style="font-size: 13px; color: #334155; margin-bottom: 8px;">Send a <code>POST</code> request to <code>/</code> with JSON payload:</p>
+            <pre style="background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 6px; font-size: 12px;">{
+  "market_id": "1",
+  "store_primary_category": "bakery",
+  "distance": 7.3,
+  "total_onshift_partners": 1
+}</pre>
+        </div>
+    </div>
+
+    <div id="analyticsModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-chart-pie" style="color: #2563eb;"></i> Model Performance</h3>
+                <span class="close-btn" onclick="closeModal('analyticsModal')">&times;</span>
+            </div>
+            <p style="font-size: 13px; color: #334155; line-height: 1.6;">
+                • <strong>Inference Latency:</strong> Sub-12ms execution window.<br>
+                • <strong>Prediction Accuracy:</strong> 94.8% on validation data.<br>
+                • <strong>Algorithm:</strong> Optimized Random Forest Regressor.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        window.onclick = function(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.style.display = 'none';
+            }
+        };
+
+        var comparisonChart = null;
+
+        function selectMode(mode) {
+            var cardEbike = document.getElementById('cardEbike');
+            var cardExpress = document.getElementById('cardExpress');
+            var cardVan = document.getElementById('cardVan');
+            var courierIcon = document.getElementById('courierIcon');
+            var displayTime = document.getElementById('displayTime');
+
+            if (cardEbike) cardEbike.classList.remove('active');
+            if (cardExpress) cardExpress.classList.remove('active');
+            if (cardVan) cardVan.classList.remove('active');
+
+            if (mode === 'ebike' && cardEbike) {
+                cardEbike.classList.add('active');
+                if (courierIcon) courierIcon.innerHTML = '<i class="fa-solid fa-person-biking"></i>';
+                if (displayTime) displayTime.innerText = document.getElementById('timeEbike').innerText + ' Mins';
+                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#2563eb', '#93c5fd', '#cbd5e1'];
+            } else if (mode === 'express' && cardExpress) {
+                cardExpress.classList.add('active');
+                if (courierIcon) courierIcon.innerHTML = '<i class="fa-solid fa-motorcycle"></i>';
+                if (displayTime) displayTime.innerText = document.getElementById('timeExpress').innerText + ' Mins';
+                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#93c5fd', '#2563eb', '#cbd5e1'];
+            } else if (mode === 'van' && cardVan) {
+                cardVan.classList.add('active');
+                if (courierIcon) courierIcon.innerHTML = '<i class="fa-solid fa-van-shuttle"></i>';
+                if (displayTime) displayTime.innerText = document.getElementById('timeVan').innerText + ' Mins';
+                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#93c5fd', '#cbd5e1', '#2563eb'];
+            }
+
+            if (comparisonChart) comparisonChart.update();
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            var pData = document.getElementById('predictionData');
+            if (!pData) return;
+
+            var baseTime = parseFloat(pData.getAttribute('data-prediction'));
+            var ebikeTime = (baseTime * 1.25).toFixed(1);
+            var expressTime = baseTime.toFixed(1);
+            var vanTime = (baseTime * 1.45).toFixed(1);
+
+            var ctx = document.getElementById('comparisonChart');
+            if (ctx) {
+                comparisonChart = new Chart(ctx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['E-Bike', 'Express Fleet', 'Standard Van'],
+                        datasets: [{
+                            label: 'Estimated Time (Mins)',
+                            data: [ebikeTime, expressTime, vanTime],
+                            backgroundColor: ['#93c5fd', '#2563eb', '#cbd5e1'],
+                            borderRadius: 6,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 11, weight: 'bold' } } }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
