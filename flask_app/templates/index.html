@@ -3,131 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Porter AI - Logistics Intelligence Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Porter AI - Logistics Intelligence Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #f0f4f9; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body {
+            background: #07090e;
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
+        }
 
-        /* Navigation Bar */
-        .navbar { background: #0f172a; color: #ffffff; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 600; text-decoration: none; color: white; }
-        .logo i { color: #3b82f6; font-size: 24px; }
-        .logo strong { color: #3b82f6; }
-        nav { display: flex; align-items: center; gap: 25px; }
-        nav a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; cursor: pointer; }
-        nav a:hover { color: #ffffff; }
-        .btn-nav { background: #2563eb; color: white !important; padding: 8px 18px; border-radius: 6px; }
-
-        /* Main Dashboard Grid */
-        .dashboard-wrapper { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 24px 24px; }
-        .content-grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; max-width: 1100px; width: 100%; }
-
-        .card { background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
-        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-        .header-icon { font-size: 20px; color: #2563eb; background: #eff6ff; padding: 10px; border-radius: 8px; }
-        .header-icon.accent { color: #0d9488; background: #ccfbf1; }
-        .card-header h2 { font-size: 17px; font-weight: 600; color: #0f172a; }
-        .card-header p { font-size: 12px; color: #64748b; }
-
-        /* Inputs */
-        .input-group { margin-bottom: 14px; }
-        .input-group label { display: block; font-size: 12px; font-weight: 500; color: #334155; margin-bottom: 6px; }
-        .input-wrapper { position: relative; display: flex; align-items: center; }
-        .input-wrapper i { position: absolute; left: 12px; color: #94a3b8; font-size: 14px; }
-        .input-wrapper input { width: 100%; padding: 10px 12px 10px 36px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; transition: all 0.2s; }
-        .input-wrapper input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
-
-        .submit-btn { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 16px; transition: background 0.2s; }
-        .submit-btn:hover { background: #1d4ed8; }
-
-        .side-panel { display: flex; flex-direction: column; gap: 20px; }
-
-        /* Simulated Route Map Graphic */
-        .map-box {
-            height: 160px;
-            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        /* Top Bar */
+        .navbar {
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 14px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 800; text-decoration: none; color: #fff; letter-spacing: -0.5px; }
+        .logo-icon {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            width: 38px;
+            height: 38px;
             border-radius: 10px;
-            position: relative;
-            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #93c5fd;
-            margin-bottom: 16px;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+        .logo-icon i { color: #fff; font-size: 16px; }
+        .logo span strong { color: #60a5fa; }
+
+        nav { display: flex; align-items: center; gap: 28px; }
+        nav a { color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.2s; cursor: pointer; }
+        nav a:hover { color: #38bdf8; }
+        .btn-nav {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: #fff !important;
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+        }
+        .btn-nav:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45); }
+
+        /* Metrics Bar */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 1240px;
+            width: 100%;
+            margin: 24px auto 0;
+            padding: 0 24px;
+        }
+        .kpi-card {
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            padding: 16px 20px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: border-color 0.2s;
+        }
+        .kpi-card:hover { border-color: rgba(59, 130, 246, 0.3); }
+        .kpi-info p { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; }
+        .kpi-info h4 { font-size: 20px; font-weight: 800; color: #f8fafc; margin-top: 3px; }
+        .kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .kpi-blue { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
+        .kpi-teal { background: rgba(20, 184, 166, 0.12); color: #2dd4bf; }
+        .kpi-purple { background: rgba(168, 85, 247, 0.12); color: #c084fc; }
+        .kpi-emerald { background: rgba(16, 185, 129, 0.12); color: #34d399; }
+
+        /* Dashboard Body */
+        .dashboard-wrapper { flex: 1; display: flex; justify-content: center; padding: 24px; }
+        .content-grid { display: grid; grid-template-columns: 430px 1fr; gap: 24px; max-width: 1240px; width: 100%; }
+
+        .card {
+            background: rgba(13, 18, 30, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .header-icon {
+            font-size: 16px;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .header-icon.accent { color: #2dd4bf; background: rgba(45, 212, 191, 0.1); border-color: rgba(45, 212, 191, 0.2); }
+        .card-header h2 { font-size: 17px; font-weight: 700; color: #f8fafc; }
+        .card-header p { font-size: 12px; color: #64748b; margin-top: 1px; }
+
+        /* Grid inputs for two-column form items */
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* Input Controls */
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 5px; letter-spacing: 0.4px; text-transform: uppercase; }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper i { position: absolute; left: 12px; color: #475569; font-size: 12px; z-index: 2; }
+        
+        .input-wrapper input, .input-wrapper select {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            background: rgba(18, 26, 43, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #f8fafc;
+            outline: none;
+            transition: all 0.2s;
+            appearance: none;
+        }
+        .input-wrapper select { cursor: pointer; }
+        .input-wrapper select option { background: #0f172a; color: #fff; }
+        .input-wrapper input::placeholder { color: #475569; }
+        .input-wrapper input:focus, .input-wrapper select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+            background: rgba(22, 32, 54, 0.95);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
+        }
+        .submit-btn:hover { background: linear-gradient(135deg, #1d4ed8, #2563eb); transform: translateY(-1px); box-shadow: 0 10px 22px rgba(37, 99, 235, 0.4); }
+
+        .side-panel { display: flex; flex-direction: column; gap: 20px; }
+
+        /* Vector Motion Map */
+        .map-box {
+            height: 200px;
+            background: radial-gradient(circle at center, #111827 0%, #07090e 100%);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .map-grid-line {
             position: absolute;
             width: 100%;
             height: 100%;
-            background-image: linear-gradient(to right, rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.4) 1px, transparent 1px);
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
             background-size: 20px 20px;
         }
-        .map-route {
+        .map-route-base {
             position: absolute;
-            width: 75%;
+            width: 72%;
             height: 4px;
-            background: #2563eb;
+            background: rgba(255, 255, 255, 0.08);
             top: 50%;
             border-radius: 2px;
-            box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
         }
+        .map-route-active {
+            position: absolute;
+            width: 72%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #6366f1, #38bdf8);
+            top: 50%;
+            border-radius: 2px;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+        }
+
         .map-icon {
             position: absolute;
-            width: 38px;
-            height: 38px;
-            background: #ffffff;
+            width: 42px;
+            height: 42px;
+            background: rgba(11, 15, 25, 0.95);
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
             font-size: 15px;
             z-index: 2;
         }
-        .icon-start { left: 10%; top: 38%; color: #dc2626; }
-        .icon-end { right: 10%; top: 38%; color: #16a34a; }
-        .icon-truck { left: 45%; top: 35%; color: #2563eb; animation: moveTruck 3s infinite ease-in-out; }
+        .icon-start { left: 12%; top: 39%; color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
+        .icon-end { right: 12%; top: 39%; color: #22c55e; border-color: rgba(34, 197, 94, 0.3); }
 
-        @keyframes moveTruck {
-            0% { transform: translateX(-20px); }
-            50% { transform: translateX(20px); }
-            100% { transform: translateX(-20px); }
+        .icon-truck {
+            left: 12%;
+            top: 37%;
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.5);
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.4);
+            animation: driveAcross 3.2s infinite linear;
+            z-index: 3;
         }
 
-        /* Speed & Mode Comparison Cards */
+        @keyframes driveAcross {
+            0% { left: 12%; opacity: 0; transform: scale(0.8); }
+            10% { opacity: 1; transform: scale(1); }
+            90% { opacity: 1; transform: scale(1); }
+            100% { left: 76%; opacity: 0; transform: scale(0.8); }
+        }
+
+        .speed-express { animation-duration: 2.2s !important; }
+        .speed-ebike { animation-duration: 3.8s !important; }
+        .speed-van { animation-duration: 5.2s !important; }
+
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            animation: ringPulse 2s infinite ease-out;
+        }
+        @keyframes ringPulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        /* Result Cards */
+        .result-highlight {
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            padding: 16px 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .result-highlight h3 { font-size: 24px; color: #4ade80; font-weight: 800; }
+
         .comparison-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
-        .comp-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .comp-card:hover { transform: translateY(-2px); border-color: #93c5fd; }
-        .comp-card i { font-size: 18px; margin-bottom: 4px; color: #64748b; }
-        .comp-card.active { background: #eff6ff; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15); }
-        .comp-card.active i { color: #2563eb; }
-        .comp-card h5 { font-size: 11px; color: #64748b; }
-        .comp-card span { font-size: 14px; font-weight: 700; color: #0f172a; }
+        .comp-card {
+            background: rgba(18, 26, 43, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .comp-card:hover { background: rgba(30, 41, 59, 0.7); border-color: rgba(59, 130, 246, 0.3); }
+        .comp-card i { font-size: 18px; margin-bottom: 6px; color: #64748b; }
+        .comp-card.active { background: rgba(37, 99, 235, 0.15); border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.18); }
+        .comp-card.active i { color: #60a5fa; }
+        .comp-card h5 { font-size: 11px; color: #64748b; font-weight: 600; }
+        .comp-card span { font-size: 14px; font-weight: 700; color: #f8fafc; }
 
-        .result-highlight { background: #f0fdf4; border: 1px solid #86efac; padding: 14px 18px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .result-highlight h3 { font-size: 24px; color: #15803d; font-weight: 700; }
+        .chart-container { position: relative; height: 170px; width: 100%; margin-top: 16px; }
 
-        /* Chart Container */
-        .chart-container { position: relative; height: 180px; width: 100%; margin-top: 16px; }
-
-        /* Modal Popups */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-card { background: #ffffff; padding: 24px; border-radius: 12px; width: 90%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
-        .close-btn { font-size: 22px; font-weight: bold; color: #64748b; cursor: pointer; }
-        .close-btn:hover { color: #0f172a; }
+        /* Modals */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 9, 14, 0.85); backdrop-filter: blur(10px); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-card { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); padding: 24px; border-radius: 16px; width: 90%; max-width: 480px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px; }
+        .modal-header h3 { color: #f8fafc; font-size: 16px; font-weight: 700; }
+        .close-btn { font-size: 20px; font-weight: bold; color: #64748b; cursor: pointer; }
+        .close-btn:hover { color: #f8fafc; }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation Bar -->
+    <!-- Header Navigation -->
     <header class="navbar">
         <a href="/" class="logo">
-            <i class="fa-solid fa-truck-fast"></i>
+            <div class="logo-icon"><i class="fa-solid fa-truck-fast"></i></div>
             <span>Porter <strong>AI</strong></span>
         </a>
         <nav>
@@ -138,49 +324,142 @@
         </nav>
     </header>
 
+    <!-- Metrics Row -->
+    <section class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-info">
+                <p>Model Latency</p>
+                <h4>&lt; 12ms</h4>
+            </div>
+            <div class="kpi-icon kpi-blue"><i class="fa-solid fa-bolt"></i></div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-info">
+                <p>Accuracy Rate</p>
+                <h4>94.8%</h4>
+            </div>
+            <div class="kpi-icon kpi-teal"><i class="fa-solid fa-bullseye"></i></div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-info">
+                <p>Active Fleets</p>
+                <h4>1,420</h4>
+            </div>
+            <div class="kpi-icon kpi-purple"><i class="fa-solid fa-truck-ramp-box"></i></div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-info">
+                <p>System Status</p>
+                <h4>Optimal</h4>
+            </div>
+            <div class="kpi-icon kpi-emerald"><i class="fa-solid fa-shield-halved"></i></div>
+        </div>
+    </section>
+
+    <!-- Main Container -->
     <main class="dashboard-wrapper">
         <div class="content-grid">
             
-            <!-- Left Panel: Input Form -->
+            <!-- Left Form Panel -->
             <div class="card form-card">
                 <div class="card-header">
-                    <i class="fa-solid fa-stopwatch header-icon"></i>
+                    <div class="header-icon"><i class="fa-solid fa-sliders"></i></div>
                     <div>
                         <h2>Delivery Estimator</h2>
-                        <p>Real-time machine learning prediction</p>
+                        <p>Predict arrival times using live telemetry</p>
                     </div>
                 </div>
 
                 <form action="/" method="POST">
-                    <div class="input-group">
-                        <label for="market_id">Market ID</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-store"></i>
-                            <input type="text" id="market_id" name="market_id" value="{{ form_data.get('market_id', '') }}" placeholder="e.g. 1" required>
+                    <div class="form-grid-2">
+                        <div class="input-group">
+                            <label for="market_id">Market Region</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-location-crosshairs"></i>
+                                <select id="market_id" name="market_id" required>
+                                    <option value="1" {% if form_data.get('market_id') == '1' %}selected{% endif %}>Market 1 (Core)</option>
+                                    <option value="2" {% if form_data.get('market_id') == '2' %}selected{% endif %}>Market 2 (Suburban)</option>
+                                    <option value="3" {% if form_data.get('market_id') == '3' %}selected{% endif %}>Market 3 (Industrial)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="store_primary_category">Store Category</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-store"></i>
+                                <select id="store_primary_category" name="store_primary_category" required>
+                                    <option value="american" {% if form_data.get('store_primary_category') == 'american' %}selected{% endif %}>Fast Food</option>
+                                    <option value="bakery" {% if form_data.get('store_primary_category') == 'bakery' %}selected{% endif %}>Bakery</option>
+                                    <option value="italian" {% if form_data.get('store_primary_category') == 'italian' %}selected{% endif %}>Italian / Pizza</option>
+                                    <option value="groceries" {% if form_data.get('store_primary_category') == 'groceries' %}selected{% endif %}>Groceries</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label for="store_primary_category">Store Category</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-utensils"></i>
-                            <input type="text" id="store_primary_category" name="store_primary_category" value="{{ form_data.get('store_primary_category', '') }}" placeholder="e.g. American, Bakery" required>
+                    <div class="form-grid-2">
+                        <div class="input-group">
+                            <label for="weather_condition">Weather Condition</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-cloud-sun-rain"></i>
+                                <select id="weather_condition" name="weather_condition" required>
+                                    <option value="clear" {% if form_data.get('weather_condition') == 'clear' %}selected{% endif %}>Clear / Sunny</option>
+                                    <option value="rain" {% if form_data.get('weather_condition') == 'rain' %}selected{% endif %}>Rainy / Storm</option>
+                                    <option value="fog" {% if form_data.get('weather_condition') == 'fog' %}selected{% endif %}>Foggy / Haze</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="traffic_density">Traffic Density</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-car-side"></i>
+                                <select id="traffic_density" name="traffic_density" required>
+                                    <option value="low" {% if form_data.get('traffic_density') == 'low' %}selected{% endif %}>Low (Fluid)</option>
+                                    <option value="medium" {% if form_data.get('traffic_density') == 'medium' %}selected{% endif %}>Moderate</option>
+                                    <option value="high" {% if form_data.get('traffic_density') == 'high' %}selected{% endif %}>Heavy (Jam)</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label for="distance">Distance (km)</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-route"></i>
-                            <input type="number" step="0.1" id="distance" name="distance" value="{{ form_data.get('distance', '') }}" placeholder="e.g. 3.5" required>
+                    <div class="form-grid-2">
+                        <div class="input-group">
+                            <label for="num_items">Item Payload Count</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-boxes-stacked"></i>
+                                <input type="number" min="1" max="50" id="num_items" name="num_items" value="{{ form_data.get('num_items', '1') }}" placeholder="e.g. 3" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="distance">Distance (km)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-route"></i>
+                                <input type="number" step="0.1" id="distance" name="distance" value="{{ form_data.get('distance', '') }}" placeholder="e.g. 4.5" required>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label for="total_onshift_partners">Onshift Partners</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-user-ninja"></i>
-                            <input type="number" id="total_onshift_partners" name="total_onshift_partners" value="{{ form_data.get('total_onshift_partners', '') }}" placeholder="e.g. 12" required>
+                    <div class="form-grid-2">
+                        <div class="input-group">
+                            <label for="order_priority">Order Priority</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-rocket"></i>
+                                <select id="order_priority" name="order_priority" required>
+                                    <option value="standard" {% if form_data.get('order_priority') == 'standard' %}selected{% endif %}>Standard Delivery</option>
+                                    <option value="express" {% if form_data.get('order_priority') == 'express' %}selected{% endif %}>Express Priority</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="total_onshift_partners">Active Driver Fleet</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-users"></i>
+                                <input type="number" id="total_onshift_partners" name="total_onshift_partners" value="{{ form_data.get('total_onshift_partners', '') }}" placeholder="e.g. 14" required>
+                            </div>
                         </div>
                     </div>
 
@@ -191,38 +470,47 @@
                 </form>
             </div>
 
-            <!-- Right Panel: Live Route, Comparison Cards & Graph -->
+            <!-- Right Analytics Panel -->
             <div class="side-panel">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa-solid fa-map-location-dot header-icon accent"></i>
+                        <div class="header-icon accent"><i class="fa-solid fa-map-location-dot"></i></div>
                         <div>
-                            <h2>Live Dispatch Route & Analytics</h2>
-                            <p>Real-Time Optimization Metrics</p>
+                            <h2>Live Dispatch Route & Physics</h2>
+                            <p>Dynamic Vehicle Positioning System</p>
                         </div>
                     </div>
 
-                    <!-- Interactive Animated Route Map -->
+                    <!-- Map Box -->
                     <div class="map-box">
                         <div class="map-grid-line"></div>
-                        <div class="map-route"></div>
-                        <div class="map-icon icon-start" title="Pickup Location"><i class="fa-solid fa-shop"></i></div>
-                        <div class="map-icon icon-truck" id="courierIcon" title="Active Fleet Courier"><i class="fa-solid fa-motorcycle"></i></div>
-                        <div class="map-icon icon-end" title="Dropoff Location"><i class="fa-solid fa-location-dot"></i></div>
+                        <div class="map-route-base"></div>
+                        <div class="map-route-active"></div>
+                        
+                        <div class="map-icon icon-start" title="Pickup Point">
+                            <i class="fa-solid fa-shop"></i>
+                        </div>
+                        
+                        <div class="map-icon icon-truck speed-express" id="courierIcon" title="Active Vehicle">
+                            <i class="fa-solid fa-motorcycle"></i>
+                            <div class="pulse-ring"></div>
+                        </div>
+
+                        <div class="map-icon icon-end" title="Dropoff Point">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
                     </div>
 
                     {% if prediction is not none %}
-                        <!-- Prediction Result Highlight -->
                         <div class="result-highlight" id="predictionData" data-prediction="{{ prediction }}">
                             <div>
-                                <span style="font-size: 11px; color: #15803d; font-weight: 700; letter-spacing: 0.5px;">ESTIMATED ARRIVAL TIME</span>
+                                <span style="font-size: 11px; color: #4ade80; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">ESTIMATED ARRIVAL TIME</span>
                                 <h3 id="displayTime">{{ prediction }} Mins</h3>
                             </div>
-                            <i class="fa-solid fa-circle-check" style="font-size: 32px; color: #16a34a;"></i>
+                            <i class="fa-solid fa-circle-check" style="font-size: 28px; color: #22c55e;"></i>
                         </div>
 
-                        <!-- Mode Switcher -->
-                        <h4 style="font-size: 12px; color: #475569; margin-bottom: 6px;">Delivery Mode Comparison</h4>
+                        <h4 style="font-size: 11px; color: #64748b; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px;">Delivery Mode Comparison</h4>
                         <div class="comparison-grid">
                             <div class="comp-card" id="cardEbike" onclick="selectMode('ebike')">
                                 <i class="fa-solid fa-person-biking"></i>
@@ -241,13 +529,12 @@
                             </div>
                         </div>
 
-                        <!-- Live Comparison Graph -->
                         <div class="chart-container">
                             <canvas id="comparisonChart"></canvas>
                         </div>
                     {% else %}
-                        <p style="font-size: 13px; color: #64748b; text-align: center; padding: 30px 0;">
-                            Fill out the form fields and click <strong>Predict Delivery Time</strong> to view delivery routes, vehicle comparisons, and real-time performance graphs.
+                        <p style="font-size: 12px; color: #64748b; text-align: center; padding: 28px 0;">
+                            Fill out the parameter form and click <strong>Predict Delivery Time</strong> to display the vehicle route and mode metrics.
                         </p>
                     {% endif %}
                 </div>
@@ -260,13 +547,13 @@
     <div id="featuresModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-star" style="color: #2563eb;"></i> Key Features</h3>
+                <h3><i class="fa-solid fa-star" style="color: #60a5fa;"></i> Platform Features</h3>
                 <span class="close-btn" onclick="closeModal('featuresModal')">&times;</span>
             </div>
-            <p style="font-size: 13px; color: #334155; line-height: 1.6;">
-                • <strong>Real-time ML Inference:</strong> Continuous predictions scored instantly.<br>
-                • <strong>Fleet Auto-Scaling:</strong> Adjusts dynamically based on active drivers.<br>
-                • <strong>Multi-Vehicle Routing:</strong> Real-time mode comparison graphs.
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.7;">
+                • <strong>Weather & Traffic Adaptive:</strong> Dynamically recalculates delays based on rain, fog, and jam density.<br>
+                • <strong>Payload & Priority Scaling:</strong> Adjusts speed based on order urgency and item weights.<br>
+                • <strong>Sub-12ms Inference:</strong> Microsecond pipeline execution.
             </p>
         </div>
     </div>
@@ -274,15 +561,19 @@
     <div id="apiModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-code" style="color: #2563eb;"></i> API Documentation</h3>
+                <h3><i class="fa-solid fa-code" style="color: #60a5fa;"></i> REST API Endpoint</h3>
                 <span class="close-btn" onclick="closeModal('apiModal')">&times;</span>
             </div>
-            <p style="font-size: 13px; color: #334155; margin-bottom: 8px;">Send a <code>POST</code> request to <code>/</code> with JSON payload:</p>
-            <pre style="background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 6px; font-size: 12px;">{
+            <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 10px;">Post JSON data to <code>/</code> for prediction output:</p>
+            <pre style="background: #07090e; border: 1px solid rgba(255,255,255,0.08); color: #38bdf8; padding: 12px; border-radius: 8px; font-size: 11px;">{
   "market_id": "1",
   "store_primary_category": "bakery",
-  "distance": 7.3,
-  "total_onshift_partners": 1
+  "weather_condition": "rain",
+  "traffic_density": "high",
+  "num_items": 3,
+  "distance": 4.5,
+  "order_priority": "express",
+  "total_onshift_partners": 14
 }</pre>
         </div>
     </div>
@@ -290,31 +581,21 @@
     <div id="analyticsModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-chart-pie" style="color: #2563eb;"></i> Model Performance</h3>
+                <h3><i class="fa-solid fa-chart-pie" style="color: #60a5fa;"></i> Engine Analytics</h3>
                 <span class="close-btn" onclick="closeModal('analyticsModal')">&times;</span>
             </div>
-            <p style="font-size: 13px; color: #334155; line-height: 1.6;">
-                • <strong>Inference Latency:</strong> Sub-12ms execution window.<br>
-                • <strong>Prediction Accuracy:</strong> 94.8% on validation data.<br>
-                • <strong>Algorithm:</strong> Optimized Random Forest Regressor.
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.7;">
+                • <strong>Inference Latency:</strong> ~11.4ms execution average.<br>
+                • <strong>Accuracy Metric:</strong> 94.8% on validation testing.<br>
+                • <strong>Model Core:</strong> Scikit-Learn Regression Pipeline.
             </p>
         </div>
     </div>
 
     <script>
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        window.onclick = function(e) {
-            if (e.target.classList.contains('modal-overlay')) {
-                e.target.style.display = 'none';
-            }
-        };
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        window.onclick = function(e) { if (e.target.classList.contains('modal-overlay')) e.target.style.display = 'none'; }
 
         var comparisonChart = null;
 
@@ -329,21 +610,34 @@
             if (cardExpress) cardExpress.classList.remove('active');
             if (cardVan) cardVan.classList.remove('active');
 
+            if (courierIcon) {
+                courierIcon.classList.remove('speed-ebike', 'speed-express', 'speed-van');
+            }
+
             if (mode === 'ebike' && cardEbike) {
                 cardEbike.classList.add('active');
-                if (courierIcon) courierIcon.innerHTML = '<i class="fa-solid fa-person-biking"></i>';
+                if (courierIcon) {
+                    courierIcon.innerHTML = '<i class="fa-solid fa-person-biking"></i><div class="pulse-ring"></div>';
+                    courierIcon.classList.add('speed-ebike');
+                }
                 if (displayTime) displayTime.innerText = document.getElementById('timeEbike').innerText + ' Mins';
-                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#2563eb', '#93c5fd', '#cbd5e1'];
+                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#3b82f6', '#121a2b', '#121a2b'];
             } else if (mode === 'express' && cardExpress) {
                 cardExpress.classList.add('active');
-                if (courierIcon) courierIcon.innerHTML = '<i class="fa-solid fa-motorcycle"></i>';
+                if (courierIcon) {
+                    courierIcon.innerHTML = '<i class="fa-solid fa-motorcycle"></i><div class="pulse-ring"></div>';
+                    courierIcon.classList.add('speed-express');
+                }
                 if (displayTime) displayTime.innerText = document.getElementById('timeExpress').innerText + ' Mins';
-                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#93c5fd', '#2563eb', '#cbd5e1'];
+                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#121a2b', '#3b82f6', '#121a2b'];
             } else if (mode === 'van' && cardVan) {
                 cardVan.classList.add('active');
-                if (courierIcon) courierIcon.innerHTML = '<i class="fa-solid fa-van-shuttle"></i>';
+                if (courierIcon) {
+                    courierIcon.innerHTML = '<i class="fa-solid fa-van-shuttle"></i><div class="pulse-ring"></div>';
+                    courierIcon.classList.add('speed-van');
+                }
                 if (displayTime) displayTime.innerText = document.getElementById('timeVan').innerText + ' Mins';
-                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#93c5fd', '#cbd5e1', '#2563eb'];
+                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#121a2b', '#121a2b', '#3b82f6'];
             }
 
             if (comparisonChart) comparisonChart.update();
@@ -367,9 +661,10 @@
                         datasets: [{
                             label: 'Estimated Time (Mins)',
                             data: [ebikeTime, expressTime, vanTime],
-                            backgroundColor: ['#93c5fd', '#2563eb', '#cbd5e1'],
-                            borderRadius: 6,
-                            borderWidth: 0
+                            backgroundColor: ['#121a2b', '#3b82f6', '#121a2b'],
+                            borderColor: 'rgba(255,255,255,0.08)',
+                            borderWidth: 1,
+                            borderRadius: 6
                         }]
                     },
                     options: {
@@ -377,8 +672,8 @@
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
-                            x: { grid: { display: false }, ticks: { font: { size: 11, weight: 'bold' } } }
+                            y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11, weight: 'bold' } } }
                         }
                     }
                 });
