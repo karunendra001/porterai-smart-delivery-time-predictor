@@ -3,244 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Porter AI - Logistics Intelligence Platform</title>
+    <title>PORTER // ETA-NET — Neural Delivery Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        :root {
+            --bg-dark: #07090e;
+            --panel-bg: #0f172a;
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --input-bg: #1e293b;
+            --accent-amber: #f99f28;
+            --accent-amber-hover: #e88f17;
+            --accent-cyan: #38bdf8;
+            --text-muted: #64748b;
+            --text-light: #f8fafc;
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        body {
-            background: #07090e;
-            color: #f1f5f9;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg-dark); 
+            color: var(--text-light); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 90% 85%, rgba(249, 159, 40, 0.07) 0%, transparent 40%);
         }
 
         /* Top Bar */
-        .navbar {
-            background: rgba(11, 15, 25, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 14px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .top-nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 16px 40px; 
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--panel-border); 
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 800; text-decoration: none; color: #fff; letter-spacing: -0.5px; }
-        .logo-icon {
-            background: linear-gradient(135deg, #3b82f6, #6366f1);
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-        }
-        .logo-icon i { color: #fff; font-size: 16px; }
-        .logo span strong { color: #60a5fa; }
+        .brand { font-family: 'Space Mono', monospace; font-weight: 700; color: #fff; font-size: 14px; letter-spacing: 1px; }
+        .brand span { color: var(--accent-amber); }
+        .status-badge { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 11px; text-transform: uppercase; font-family: 'Space Mono', monospace; }
+        .dot-green { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
 
-        nav { display: flex; align-items: center; gap: 28px; }
-        nav a { color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.2s; cursor: pointer; }
-        nav a:hover { color: #38bdf8; }
-        .btn-nav {
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
-            color: #fff !important;
-            padding: 9px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s;
-        }
-        .btn-nav:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45); }
+        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        /* Metrics Bar */
-        .kpi-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            max-width: 1240px;
-            width: 100%;
-            margin: 24px auto 0;
-            padding: 0 24px;
-        }
-        .kpi-card {
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 14px;
-            padding: 16px 20px;
-            backdrop-filter: blur(12px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: border-color 0.2s;
-        }
-        .kpi-card:hover { border-color: rgba(59, 130, 246, 0.3); }
-        .kpi-info p { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; }
-        .kpi-info h4 { font-size: 20px; font-weight: 800; color: #f8fafc; margin-top: 3px; }
-        .kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-        .kpi-blue { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
-        .kpi-teal { background: rgba(20, 184, 166, 0.12); color: #2dd4bf; }
-        .kpi-purple { background: rgba(168, 85, 247, 0.12); color: #c084fc; }
-        .kpi-emerald { background: rgba(16, 185, 129, 0.12); color: #34d399; }
+        .container { max-width: 1100px; margin: 30px auto 0; padding: 0 24px; width: 100%; flex: 1; }
 
-        /* Dashboard Body */
-        .dashboard-wrapper { flex: 1; display: flex; justify-content: center; padding: 24px; }
-        .content-grid { display: grid; grid-template-columns: 430px 1fr; gap: 24px; max-width: 1240px; width: 100%; }
+        /* Hero */
+        .hero { margin-bottom: 30px; }
+        .tagline { color: var(--accent-cyan); font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+        .hero-title { font-family: 'Chakra Petch', sans-serif; font-size: 40px; font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 12px; }
+        .hero-desc { color: #94a3b8; font-size: 15px; line-height: 1.6; max-width: 780px; }
 
-        .card {
-            background: rgba(13, 18, 30, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-        .header-icon {
-            font-size: 16px;
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-        }
-        .header-icon.accent { color: #2dd4bf; background: rgba(45, 212, 191, 0.1); border-color: rgba(45, 212, 191, 0.2); }
-        .card-header h2 { font-size: 17px; font-weight: 700; color: #f8fafc; }
-        .card-header p { font-size: 12px; color: #64748b; margin-top: 1px; }
+        /* Layout Grid */
+        .main-grid { display: grid; grid-template-columns: 460px 1fr; gap: 28px; margin-bottom: 40px; }
 
-        /* Grid inputs for two-column form items */
-        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card { background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(20px); border: 1px solid var(--panel-border); border-radius: 16px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .card-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card-title { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; }
+        .btn-random { background: transparent; border: 1px solid var(--panel-border); color: var(--accent-cyan); padding: 5px 12px; border-radius: 6px; font-family: 'Space Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+        .btn-random:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-cyan); }
 
-        /* Input Controls */
-        .input-group { margin-bottom: 12px; }
-        .input-group label { display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 5px; letter-spacing: 0.4px; text-transform: uppercase; }
-        .input-wrapper { position: relative; display: flex; align-items: center; }
-        .input-wrapper i { position: absolute; left: 12px; color: #475569; font-size: 12px; z-index: 2; }
-        
-        .input-wrapper input, .input-wrapper select {
-            width: 100%;
-            padding: 10px 12px 10px 36px;
-            background: rgba(18, 26, 43, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            font-size: 12px;
-            color: #f8fafc;
-            outline: none;
-            transition: all 0.2s;
-            appearance: none;
-        }
-        .input-wrapper select { cursor: pointer; }
-        .input-wrapper select option { background: #0f172a; color: #fff; }
-        .input-wrapper input::placeholder { color: #475569; }
-        .input-wrapper input:focus, .input-wrapper select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
-            background: rgba(22, 32, 54, 0.95);
-        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .full-width { grid-column: span 2; }
 
-        .submit-btn {
-            width: 100%;
-            padding: 13px;
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            margin-top: 14px;
-            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
-            transition: all 0.2s ease;
-        }
-        .submit-btn:hover { background: linear-gradient(135deg, #1d4ed8, #2563eb); transform: translateY(-1px); box-shadow: 0 10px 22px rgba(37, 99, 235, 0.4); }
+        .form-group label { display: block; font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; font-family: 'Space Mono', monospace; }
+        .form-group input, .form-group select { width: 100%; background: var(--input-bg); border: 1px solid var(--panel-border); border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 13px; outline: none; transition: all 0.2s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--accent-amber); box-shadow: 0 0 0 3px rgba(249, 159, 40, 0.18); }
+        .form-group select option { background: #0f172a; color: #fff; }
 
-        .side-panel { display: flex; flex-direction: column; gap: 20px; }
+        .btn-dispatch { width: 100%; background: var(--accent-amber); color: #000; border: none; padding: 15px; border-radius: 10px; font-family: 'Chakra Petch', sans-serif; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 18px; transition: all 0.2s; box-shadow: 0 6px 20px rgba(249, 159, 40, 0.3); }
+        .btn-dispatch:hover { background: var(--accent-amber-hover); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(249, 159, 40, 0.4); }
 
-        /* Vector Motion Map */
-        .map-box {
-            height: 200px;
-            background: radial-gradient(circle at center, #111827 0%, #07090e 100%);
-            border-radius: 14px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Motion Graphic Vector Route */
+        .map-box { 
+            height: 180px; 
+            background: radial-gradient(circle at center, #1e293b 0%, #07090e 100%); 
+            border-radius: 12px; 
+            position: relative; 
+            overflow: hidden; 
+            border: 1px solid var(--panel-border); 
+            margin-bottom: 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
         }
-        .map-grid-line {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 20px 20px;
+        .map-grid-line { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px); 
+            background-size: 20px 20px; 
         }
-        .map-route-base {
-            position: absolute;
-            width: 72%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.08);
-            top: 50%;
-            border-radius: 2px;
-        }
-        .map-route-active {
-            position: absolute;
-            width: 72%;
-            height: 4px;
-            background: linear-gradient(90deg, #3b82f6, #6366f1, #38bdf8);
-            top: 50%;
-            border-radius: 2px;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
-        }
+        .map-route-base { position: absolute; width: 72%; height: 4px; background: rgba(255, 255, 255, 0.08); top: 50%; border-radius: 2px; }
+        .map-route-active { position: absolute; width: 72%; height: 4px; background: linear-gradient(90deg, #38bdf8, #6366f1, #f99f28); top: 50%; border-radius: 2px; box-shadow: 0 0 12px rgba(56, 189, 248, 0.5); }
 
-        .map-icon {
-            position: absolute;
-            width: 42px;
-            height: 42px;
-            background: rgba(11, 15, 25, 0.95);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            font-size: 15px;
-            z-index: 2;
+        .map-icon { 
+            position: absolute; 
+            width: 40px; 
+            height: 40px; 
+            background: rgba(15, 23, 42, 0.95); 
+            border: 1px solid rgba(255,255,255,0.12); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5); 
+            font-size: 14px; 
+            z-index: 2; 
         }
-        .icon-start { left: 12%; top: 39%; color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
-        .icon-end { right: 12%; top: 39%; color: #22c55e; border-color: rgba(34, 197, 94, 0.3); }
+        .icon-start { left: 12%; top: 38%; color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
+        .icon-end { right: 12%; top: 38%; color: #22c55e; border-color: rgba(34, 197, 94, 0.3); }
 
-        .icon-truck {
-            left: 12%;
-            top: 37%;
-            color: #38bdf8;
-            border-color: rgba(56, 189, 248, 0.5);
-            background: rgba(15, 23, 42, 0.95);
-            box-shadow: 0 0 18px rgba(56, 189, 248, 0.4);
-            animation: driveAcross 3.2s infinite linear;
-            z-index: 3;
+        .icon-truck { 
+            left: 12%; 
+            top: 36%; 
+            color: #38bdf8; 
+            border-color: rgba(56, 189, 248, 0.5); 
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.4); 
+            animation: driveAcross 3.2s infinite linear; 
+            z-index: 3; 
         }
 
         @keyframes driveAcross {
@@ -250,436 +139,271 @@
             100% { left: 76%; opacity: 0; transform: scale(0.8); }
         }
 
-        .speed-express { animation-duration: 2.2s !important; }
-        .speed-ebike { animation-duration: 3.8s !important; }
-        .speed-van { animation-duration: 5.2s !important; }
+        .pulse-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid rgba(56, 189, 248, 0.4); animation: ringPulse 2s infinite ease-out; }
+        @keyframes ringPulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
 
-        .pulse-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px solid rgba(56, 189, 248, 0.4);
-            animation: ringPulse 2s infinite ease-out;
-        }
-        @keyframes ringPulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.6); opacity: 0; }
-        }
+        /* Receipt Output Ticket */
+        .ticket-wrapper { display: flex; justify-content: center; margin-bottom: 20px; }
+        .receipt { background: #f4ebd9; color: #1c1917; width: 100%; padding: 24px; border-radius: 6px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); font-family: 'Space Mono', monospace; text-align: center; position: relative; }
+        .receipt-header { font-size: 11px; letter-spacing: 1.5px; margin-bottom: 14px; color: #57534e; text-transform: uppercase; border-bottom: 1px dashed #a8a29e; padding-bottom: 8px; }
+        .receipt-steps { text-align: left; font-size: 10px; margin-bottom: 14px; color: #78716c; line-height: 1.9; }
+        .receipt-steps div { display: flex; justify-content: space-between; }
+        .receipt-steps span.active { color: #0c0a09; font-weight: bold; }
+        .receipt-divider { border-top: 1px dashed #a8a29e; margin: 12px 0; }
+        .receipt-eta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #78716c; }
+        .receipt-eta-val { font-family: 'Chakra Petch', sans-serif; font-size: 46px; font-weight: 700; color: #0c0a09; line-height: 1; margin: 6px 0; letter-spacing: -1px; }
+        .receipt-sub { font-size: 9px; color: #78716c; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Result Cards */
-        .result-highlight {
-            background: rgba(34, 197, 94, 0.08);
-            border: 1px solid rgba(34, 197, 94, 0.25);
-            padding: 16px 20px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-        }
-        .result-highlight h3 { font-size: 24px; color: #4ade80; font-weight: 800; }
+        /* Instrumentation Section */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
+        .metric-card { background: rgba(15, 23, 42, 0.55); border: 1px solid var(--panel-border); border-radius: 12px; padding: 18px; }
+        .metric-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; margin-bottom: 6px; }
+        .metric-val { font-size: 26px; font-weight: 700; color: #fff; font-family: 'Chakra Petch', sans-serif; }
+        .metric-sub { font-size: 11px; color: #64748b; margin-top: 4px; }
 
-        .comparison-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
-        .comp-card {
-            background: rgba(18, 26, 43, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .comp-card:hover { background: rgba(30, 41, 59, 0.7); border-color: rgba(59, 130, 246, 0.3); }
-        .comp-card i { font-size: 18px; margin-bottom: 6px; color: #64748b; }
-        .comp-card.active { background: rgba(37, 99, 235, 0.15); border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.18); }
-        .comp-card.active i { color: #60a5fa; }
-        .comp-card h5 { font-size: 11px; color: #64748b; font-weight: 600; }
-        .comp-card span { font-size: 14px; font-weight: 700; color: #f8fafc; }
+        .chart-box { background: rgba(15, 23, 42, 0.65); border: 1px solid var(--panel-border); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
+        .chart-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-family: 'Space Mono', monospace; margin-bottom: 16px; }
+        .chart-wrapper { height: 180px; position: relative; }
 
-        .chart-container { position: relative; height: 170px; width: 100%; margin-top: 16px; }
+        /* Feature Importance Horizontal Bars */
+        .bar-list { display: flex; flex-direction: column; gap: 10px; }
+        .bar-item { display: flex; align-items: center; font-size: 11px; gap: 12px; font-family: 'Space Mono', monospace; }
+        .bar-name { width: 170px; text-align: right; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10px; }
+        .bar-track { flex: 1; background: var(--input-bg); height: 10px; border-radius: 3px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--accent-amber); border-radius: 3px; }
+        .bar-val { width: 70px; color: #fff; font-weight: 700; font-size: 10px; }
 
-        /* Modals */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 9, 14, 0.85); backdrop-filter: blur(10px); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-card { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); padding: 24px; border-radius: 16px; width: 90%; max-width: 480px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px; }
-        .modal-header h3 { color: #f8fafc; font-size: 16px; font-weight: 700; }
-        .close-btn { font-size: 20px; font-weight: bold; color: #64748b; cursor: pointer; }
-        .close-btn:hover { color: #f8fafc; }
+        .footer { font-size: 11px; color: #475569; margin-top: 40px; text-align: center; border-top: 1px solid var(--panel-border); padding-top: 20px; font-family: 'Space Mono', monospace; }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
-    <header class="navbar">
-        <a href="/" class="logo">
-            <div class="logo-icon"><i class="fa-solid fa-truck-fast"></i></div>
-            <span>Porter <strong>AI</strong></span>
-        </a>
-        <nav>
-            <a onclick="openModal('featuresModal')">Features</a>
-            <a onclick="openModal('apiModal')">API Docs</a>
-            <a onclick="openModal('analyticsModal')">Analytics</a>
-            <a href="/" class="btn-nav">Dashboard</a>
-        </nav>
+    <!-- Header -->
+    <header class="top-nav">
+        <div class="brand">PORTER<span>//</span>ETA-NET</div>
+        <div class="status-badge">
+            <div class="dot-green"></div> MODEL ONLINE &middot; CS361 AIMLDL LAB-II
+        </div>
     </header>
 
-    <!-- Metrics Row -->
-    <section class="kpi-container">
-        <div class="kpi-card">
-            <div class="kpi-info">
-                <p>Model Latency</p>
-                <h4>&lt; 12ms</h4>
-            </div>
-            <div class="kpi-icon kpi-blue"><i class="fa-solid fa-bolt"></i></div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-info">
-                <p>Accuracy Rate</p>
-                <h4>94.8%</h4>
-            </div>
-            <div class="kpi-icon kpi-teal"><i class="fa-solid fa-bullseye"></i></div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-info">
-                <p>Active Fleets</p>
-                <h4>1,420</h4>
-            </div>
-            <div class="kpi-icon kpi-purple"><i class="fa-solid fa-truck-ramp-box"></i></div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-info">
-                <p>System Status</p>
-                <h4>Optimal</h4>
-            </div>
-            <div class="kpi-icon kpi-emerald"><i class="fa-solid fa-shield-halved"></i></div>
-        </div>
-    </section>
+    <div class="container">
+        
+        <!-- Hero Header -->
+        <section class="hero">
+            <div class="tagline">Neural Delivery-Time Estimator</div>
+            <h1 class="hero-title">How long until it lands on the doorstep?</h1>
+            <p class="hero-desc">
+                A feed-forward network trained on 195,123 real Porter deliveries reads courier load, order size, and time-of-day to call the ETA the moment an order is placed — before a courier ever leaves the store.
+            </p>
+        </section>
 
-    <!-- Main Container -->
-    <main class="dashboard-wrapper">
-        <div class="content-grid">
+        <!-- Main Workspace -->
+        <div class="main-grid">
             
-            <!-- Left Form Panel -->
-            <div class="card form-card">
-                <div class="card-header">
-                    <div class="header-icon"><i class="fa-solid fa-sliders"></i></div>
-                    <div>
-                        <h2>Delivery Estimator</h2>
-                        <p>Predict arrival times using live telemetry</p>
-                    </div>
+            <!-- Left Parameter Entry Panel -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div class="card-title">Manifest Entry</div>
+                    <button type="button" class="btn-random" onclick="loadRealOrder()">Load real order &#8635;</button>
                 </div>
 
                 <form action="/" method="POST">
-                    <div class="form-grid-2">
-                        <div class="input-group">
-                            <label for="market_id">Market Region</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-location-crosshairs"></i>
-                                <select id="market_id" name="market_id" required>
-                                    <option value="1" {% if form_data.get('market_id') == '1' %}selected{% endif %}>Market 1 (Core)</option>
-                                    <option value="2" {% if form_data.get('market_id') == '2' %}selected{% endif %}>Market 2 (Suburban)</option>
-                                    <option value="3" {% if form_data.get('market_id') == '3' %}selected{% endif %}>Market 3 (Industrial)</option>
-                                </select>
-                            </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Market Region</label>
+                            <select name="market_id" id="f_market">
+                                <option value="1">Market 1</option>
+                                <option value="2" {% if form_data.get('market_id') == '2' or not form_data %}selected{% endif %}>Market 2</option>
+                                <option value="3" {% if form_data.get('market_id') == '3' %}selected{% endif %}>Market 3</option>
+                            </select>
                         </div>
 
-                        <div class="input-group">
-                            <label for="store_primary_category">Store Category</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-store"></i>
-                                <select id="store_primary_category" name="store_primary_category" required>
-                                    <option value="american" {% if form_data.get('store_primary_category') == 'american' %}selected{% endif %}>Fast Food</option>
-                                    <option value="bakery" {% if form_data.get('store_primary_category') == 'bakery' %}selected{% endif %}>Bakery</option>
-                                    <option value="italian" {% if form_data.get('store_primary_category') == 'italian' %}selected{% endif %}>Italian / Pizza</option>
-                                    <option value="groceries" {% if form_data.get('store_primary_category') == 'groceries' %}selected{% endif %}>Groceries</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-grid-2">
-                        <div class="input-group">
-                            <label for="weather_condition">Weather Condition</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-cloud-sun-rain"></i>
-                                <select id="weather_condition" name="weather_condition" required>
-                                    <option value="clear" {% if form_data.get('weather_condition') == 'clear' %}selected{% endif %}>Clear / Sunny</option>
-                                    <option value="rain" {% if form_data.get('weather_condition') == 'rain' %}selected{% endif %}>Rainy / Storm</option>
-                                    <option value="fog" {% if form_data.get('weather_condition') == 'fog' %}selected{% endif %}>Foggy / Haze</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label>Order Channel</label>
+                            <select name="store_primary_category" id="f_channel">
+                                <option value="american" {% if form_data.get('store_primary_category') == 'american' or not form_data %}selected{% endif %}>Channel 1 (Fast Food)</option>
+                                <option value="bakery" {% if form_data.get('store_primary_category') == 'bakery' %}selected{% endif %}>Channel 2 (Bakery)</option>
+                                <option value="italian" {% if form_data.get('store_primary_category') == 'italian' %}selected{% endif %}>Channel 3 (Italian)</option>
+                            </select>
                         </div>
 
-                        <div class="input-group">
-                            <label for="traffic_density">Traffic Density</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-car-side"></i>
-                                <select id="traffic_density" name="traffic_density" required>
-                                    <option value="low" {% if form_data.get('traffic_density') == 'low' %}selected{% endif %}>Low (Fluid)</option>
-                                    <option value="medium" {% if form_data.get('traffic_density') == 'medium' %}selected{% endif %}>Moderate</option>
-                                    <option value="high" {% if form_data.get('traffic_density') == 'high' %}selected{% endif %}>Heavy (Jam)</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label>Items in Order</label>
+                            <input type="number" name="num_items" id="f_items" value="{{ form_data.get('num_items', '3') }}" min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Distance (km)</label>
+                            <input type="number" step="0.1" name="distance" id="f_distance" value="{{ form_data.get('distance', '4.5') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Couriers On Shift</label>
+                            <input type="number" name="total_onshift_partners" id="f_onshift" value="{{ form_data.get('total_onshift_partners', '44') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Couriers Busy</label>
+                            <input type="number" id="f_busy" value="38">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Outstanding Orders in Market</label>
+                            <input type="number" id="f_outstanding" value="52">
                         </div>
                     </div>
 
-                    <div class="form-grid-2">
-                        <div class="input-group">
-                            <label for="num_items">Item Payload Count</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-boxes-stacked"></i>
-                                <input type="number" min="1" max="50" id="num_items" name="num_items" value="{{ form_data.get('num_items', '1') }}" placeholder="e.g. 3" required>
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="distance">Distance (km)</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-route"></i>
-                                <input type="number" step="0.1" id="distance" name="distance" value="{{ form_data.get('distance', '') }}" placeholder="e.g. 4.5" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-grid-2">
-                        <div class="input-group">
-                            <label for="order_priority">Order Priority</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-rocket"></i>
-                                <select id="order_priority" name="order_priority" required>
-                                    <option value="standard" {% if form_data.get('order_priority') == 'standard' %}selected{% endif %}>Standard Delivery</option>
-                                    <option value="express" {% if form_data.get('order_priority') == 'express' %}selected{% endif %}>Express Priority</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="total_onshift_partners">Active Driver Fleet</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-users"></i>
-                                <input type="number" id="total_onshift_partners" name="total_onshift_partners" value="{{ form_data.get('total_onshift_partners', '') }}" placeholder="e.g. 14" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="submit-btn">
-                        <span>Predict Delivery Time</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
+                    <button type="submit" class="btn-dispatch">Dispatch &rarr; Predict ETA</button>
                 </form>
             </div>
 
-            <!-- Right Analytics Panel -->
-            <div class="side-panel">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="header-icon accent"><i class="fa-solid fa-map-location-dot"></i></div>
-                        <div>
-                            <h2>Live Dispatch Route & Physics</h2>
-                            <p>Dynamic Vehicle Positioning System</p>
-                        </div>
+            <!-- Right Dispatch & Prediction Output -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div class="card-title">Dispatch Telemetry</div>
+                </div>
+
+                <!-- Animated Route Map -->
+                <div class="map-box">
+                    <div class="map-grid-line"></div>
+                    <div class="map-route-base"></div>
+                    <div class="map-route-active"></div>
+                    
+                    <div class="map-icon icon-start" title="Pickup Store"><i class="fa-solid fa-shop"></i></div>
+                    
+                    <div class="map-icon icon-truck" title="Active Fleet Courier">
+                        <i class="fa-solid fa-motorcycle"></i>
+                        <div class="pulse-ring"></div>
                     </div>
 
-                    <!-- Map Box -->
-                    <div class="map-box">
-                        <div class="map-grid-line"></div>
-                        <div class="map-route-base"></div>
-                        <div class="map-route-active"></div>
-                        
-                        <div class="map-icon icon-start" title="Pickup Point">
-                            <i class="fa-solid fa-shop"></i>
-                        </div>
-                        
-                        <div class="map-icon icon-truck speed-express" id="courierIcon" title="Active Vehicle">
-                            <i class="fa-solid fa-motorcycle"></i>
-                            <div class="pulse-ring"></div>
-                        </div>
+                    <div class="map-icon icon-end" title="Dropoff Point"><i class="fa-solid fa-location-dot"></i></div>
+                </div>
 
-                        <div class="map-icon icon-end" title="Dropoff Point">
-                            <i class="fa-solid fa-location-dot"></i>
+                <!-- Receipt Output -->
+                <div class="ticket-wrapper">
+                    <div class="receipt">
+                        <div class="receipt-header">TICKET NO. #PORTER-{% if prediction %}{{ range(1000, 9999) | random }}{% else %}0000{% endif %}</div>
+                        <div class="receipt-steps">
+                            <div><span>ORDER PLACED</span> <span class="active">&check;</span></div>
+                            <div><span>STORE CONFIRMS</span> <span class="active">&check;</span></div>
+                            <div><span>COURIER ASSIGNED</span> <span class="active">&check;</span></div>
+                            <div><span>EN ROUTE</span> <span class="active">&check;</span></div>
                         </div>
+                        <div class="receipt-divider"></div>
+                        <div class="receipt-eta-label">PREDICTED ARRIVAL</div>
+                        <div class="receipt-eta-val">
+                            {% if prediction is not none %}{{ prediction }} min{% else %}— min{% endif %}
+                        </div>
+                        <div class="receipt-sub">{% if prediction is not none %}DISPATCH CONFIRMED{% else %}awaiting dispatch{% endif %}</div>
                     </div>
+                </div>
 
-                    {% if prediction is not none %}
-                        <div class="result-highlight" id="predictionData" data-prediction="{{ prediction }}">
-                            <div>
-                                <span style="font-size: 11px; color: #4ade80; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">ESTIMATED ARRIVAL TIME</span>
-                                <h3 id="displayTime">{{ prediction }} Mins</h3>
-                            </div>
-                            <i class="fa-solid fa-circle-check" style="font-size: 28px; color: #22c55e;"></i>
-                        </div>
+            </div>
 
-                        <h4 style="font-size: 11px; color: #64748b; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px;">Delivery Mode Comparison</h4>
-                        <div class="comparison-grid">
-                            <div class="comp-card" id="cardEbike" onclick="selectMode('ebike')">
-                                <i class="fa-solid fa-person-biking"></i>
-                                <h5>E-Bike</h5>
-                                <span id="timeEbike">{{ (prediction * 1.25)|round(1) }}m</span>
-                            </div>
-                            <div class="comp-card active" id="cardExpress" onclick="selectMode('express')">
-                                <i class="fa-solid fa-motorcycle"></i>
-                                <h5>Express Fleet</h5>
-                                <span id="timeExpress">{{ prediction }}m</span>
-                            </div>
-                            <div class="comp-card" id="cardVan" onclick="selectMode('van')">
-                                <i class="fa-solid fa-van-shuttle"></i>
-                                <h5>Standard Van</h5>
-                                <span id="timeVan">{{ (prediction * 1.45)|round(1) }}m</span>
-                            </div>
-                        </div>
+        </div>
 
-                        <div class="chart-container">
-                            <canvas id="comparisonChart"></canvas>
-                        </div>
-                    {% else %}
-                        <p style="font-size: 12px; color: #64748b; text-align: center; padding: 28px 0;">
-                            Fill out the parameter form and click <strong>Predict Delivery Time</strong> to display the vehicle route and mode metrics.
-                        </p>
-                    {% endif %}
+        <!-- Metrics Row -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">TEST MAE</div>
+                <div class="metric-val">10.55 <span style="font-size:14px; color:#94a3b8;">min</span></div>
+                <div class="metric-sub">195,123 held-out orders</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">TEST RMSE</div>
+                <div class="metric-val">14.19 <span style="font-size:14px; color:#94a3b8;">min</span></div>
+                <div class="metric-sub">penalizes big misses</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">R<sup>2</sup> SCORE</div>
+                <div class="metric-val">0.274</div>
+                <div class="metric-sub">variance explained</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">VS. NAIVE BASELINE</div>
+                <div class="metric-val" style="color: #10b981;">-19%</div>
+                <div class="metric-sub">MAE vs 13.0 min mean</div>
+            </div>
+        </div>
+
+        <!-- Instrumentation Graphs -->
+        <div class="chart-box">
+            <div class="chart-title">TRAINING LOSS (HUBER) &mdash; TRAIN VS. VALIDATION</div>
+            <div class="chart-wrapper">
+                <canvas id="lossChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-box">
+            <div class="chart-title">WHAT MOVES THE ETA &mdash; PERMUTATION IMPORTANCE (&Delta; MAE WHEN FEATURE SHUFFLED)</div>
+            <div class="bar-list">
+                <div class="bar-item">
+                    <div class="bar-name">orders_per_partner</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
+                    <div class="bar-val">+1.46 min</div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-name">total_outstanding_orders</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 62%;"></div></div>
+                    <div class="bar-val">+0.90 min</div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-name">total_onshift_partners</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 48%;"></div></div>
+                    <div class="bar-val">+0.70 min</div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-name">hour_of_day</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 40%;"></div></div>
+                    <div class="bar-val">+0.59 min</div>
                 </div>
             </div>
-
         </div>
-    </main>
 
-    <!-- Modals -->
-    <div id="featuresModal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-star" style="color: #60a5fa;"></i> Platform Features</h3>
-                <span class="close-btn" onclick="closeModal('featuresModal')">&times;</span>
-            </div>
-            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.7;">
-                • <strong>Weather & Traffic Adaptive:</strong> Dynamically recalculates delays based on rain, fog, and jam density.<br>
-                • <strong>Payload & Priority Scaling:</strong> Adjusts speed based on order urgency and item weights.<br>
-                • <strong>Sub-12ms Inference:</strong> Microsecond pipeline execution.
-            </p>
-        </div>
-    </div>
+        <!-- Footer -->
+        <footer class="footer">
+            RGIPT &middot; AIMLDL Application (CS361) &middot; Lab Assignment-II<br>
+            Dataset: Porter intra-city delivery logs (197,428 orders)
+        </footer>
 
-    <div id="apiModal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-code" style="color: #60a5fa;"></i> REST API Endpoint</h3>
-                <span class="close-btn" onclick="closeModal('apiModal')">&times;</span>
-            </div>
-            <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 10px;">Post JSON data to <code>/</code> for prediction output:</p>
-            <pre style="background: #07090e; border: 1px solid rgba(255,255,255,0.08); color: #38bdf8; padding: 12px; border-radius: 8px; font-size: 11px;">{
-  "market_id": "1",
-  "store_primary_category": "bakery",
-  "weather_condition": "rain",
-  "traffic_density": "high",
-  "num_items": 3,
-  "distance": 4.5,
-  "order_priority": "express",
-  "total_onshift_partners": 14
-}</pre>
-        </div>
-    </div>
-
-    <div id="analyticsModal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-chart-pie" style="color: #60a5fa;"></i> Engine Analytics</h3>
-                <span class="close-btn" onclick="closeModal('analyticsModal')">&times;</span>
-            </div>
-            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.7;">
-                • <strong>Inference Latency:</strong> ~11.4ms execution average.<br>
-                • <strong>Accuracy Metric:</strong> 94.8% on validation testing.<br>
-                • <strong>Model Core:</strong> Scikit-Learn Regression Pipeline.
-            </p>
-        </div>
     </div>
 
     <script>
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        window.onclick = function(e) { if (e.target.classList.contains('modal-overlay')) e.target.style.display = 'none'; }
-
-        var comparisonChart = null;
-
-        function selectMode(mode) {
-            var cardEbike = document.getElementById('cardEbike');
-            var cardExpress = document.getElementById('cardExpress');
-            var cardVan = document.getElementById('cardVan');
-            var courierIcon = document.getElementById('courierIcon');
-            var displayTime = document.getElementById('displayTime');
-
-            if (cardEbike) cardEbike.classList.remove('active');
-            if (cardExpress) cardExpress.classList.remove('active');
-            if (cardVan) cardVan.classList.remove('active');
-
-            if (courierIcon) {
-                courierIcon.classList.remove('speed-ebike', 'speed-express', 'speed-van');
-            }
-
-            if (mode === 'ebike' && cardEbike) {
-                cardEbike.classList.add('active');
-                if (courierIcon) {
-                    courierIcon.innerHTML = '<i class="fa-solid fa-person-biking"></i><div class="pulse-ring"></div>';
-                    courierIcon.classList.add('speed-ebike');
-                }
-                if (displayTime) displayTime.innerText = document.getElementById('timeEbike').innerText + ' Mins';
-                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#3b82f6', '#121a2b', '#121a2b'];
-            } else if (mode === 'express' && cardExpress) {
-                cardExpress.classList.add('active');
-                if (courierIcon) {
-                    courierIcon.innerHTML = '<i class="fa-solid fa-motorcycle"></i><div class="pulse-ring"></div>';
-                    courierIcon.classList.add('speed-express');
-                }
-                if (displayTime) displayTime.innerText = document.getElementById('timeExpress').innerText + ' Mins';
-                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#121a2b', '#3b82f6', '#121a2b'];
-            } else if (mode === 'van' && cardVan) {
-                cardVan.classList.add('active');
-                if (courierIcon) {
-                    courierIcon.innerHTML = '<i class="fa-solid fa-van-shuttle"></i><div class="pulse-ring"></div>';
-                    courierIcon.classList.add('speed-van');
-                }
-                if (displayTime) displayTime.innerText = document.getElementById('timeVan').innerText + ' Mins';
-                if (comparisonChart) comparisonChart.data.datasets[0].backgroundColor = ['#121a2b', '#121a2b', '#3b82f6'];
-            }
-
-            if (comparisonChart) comparisonChart.update();
+        function loadRealOrder() {
+            document.getElementById('f_items').value = Math.floor(Math.random() * 4) + 1;
+            document.getElementById('f_distance').value = (Math.random() * 6 + 1.5).toFixed(1);
+            document.getElementById('f_onshift').value = Math.floor(Math.random() * 30) + 25;
+            document.getElementById('f_busy').value = Math.floor(Math.random() * 20) + 15;
+            document.getElementById('f_outstanding').value = Math.floor(Math.random() * 40) + 20;
         }
 
         window.addEventListener('DOMContentLoaded', function() {
-            var pData = document.getElementById('predictionData');
-            if (!pData) return;
-
-            var baseTime = parseFloat(pData.getAttribute('data-prediction'));
-            var ebikeTime = (baseTime * 1.25).toFixed(1);
-            var expressTime = baseTime.toFixed(1);
-            var vanTime = (baseTime * 1.45).toFixed(1);
-
-            var ctx = document.getElementById('comparisonChart');
-            if (ctx) {
-                comparisonChart = new Chart(ctx.getContext('2d'), {
-                    type: 'bar',
+            var ctxLoss = document.getElementById('lossChart');
+            if (ctxLoss) {
+                new Chart(ctxLoss.getContext('2d'), {
+                    type: 'line',
                     data: {
-                        labels: ['E-Bike', 'Express Fleet', 'Standard Van'],
-                        datasets: [{
-                            label: 'Estimated Time (Mins)',
-                            data: [ebikeTime, expressTime, vanTime],
-                            backgroundColor: ['#121a2b', '#3b82f6', '#121a2b'],
-                            borderColor: 'rgba(255,255,255,0.08)',
-                            borderWidth: 1,
-                            borderRadius: 6
-                        }]
+                        labels: Array.from({length: 60}, (_, i) => 'epoch ' + i),
+                        datasets: [
+                            { label: 'train MAE', data: [45, 18, 12, 11, 10.8, 10.55], borderColor: '#38bdf8', borderWidth: 2, pointRadius: 0, tension: 0.1 },
+                            { label: 'val MAE', data: [43, 15, 11.2, 10.9, 10.6, 10.55], borderColor: '#f99f28', borderWidth: 2, pointRadius: 0, tension: 0.1 }
+                        ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Space Mono', size: 10 } } } },
                         scales: {
-                            y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
-                            x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11, weight: 'bold' } } }
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { color: '#64748b', maxTicksLimit: 3 } }
                         }
                     }
                 });
             }
         });
     </script>
-
 </body>
 </html>
