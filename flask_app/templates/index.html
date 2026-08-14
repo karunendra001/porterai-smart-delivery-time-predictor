@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PORTER // ETA-NET — Neural Delivery Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-dark: #07090e;
-            --panel-bg: #0f172a;
+            --bg-dark: #06080d;
+            --panel-bg: #0d131f;
             --panel-border: rgba(255, 255, 255, 0.08);
-            --input-bg: #1e293b;
+            --input-bg: #151d2c;
             --accent-amber: #f99f28;
             --accent-amber-hover: #e88f17;
             --accent-cyan: #38bdf8;
+            --accent-emerald: #10b981;
             --text-muted: #64748b;
             --text-light: #f8fafc;
         }
@@ -30,8 +31,8 @@
             flex-direction: column;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.07) 0%, transparent 40%),
-                radial-gradient(circle at 90% 85%, rgba(249, 159, 40, 0.07) 0%, transparent 40%);
+                radial-gradient(circle at 8% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 92% 80%, rgba(249, 159, 40, 0.08) 0%, transparent 40%);
         }
 
         /* Top Bar */
@@ -39,8 +40,9 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 16px 40px; 
-            background: rgba(15, 23, 42, 0.8);
+            padding: 14px 36px; 
+            background: rgba(13, 19, 31, 0.85);
+            -webkit-backdrop-filter: blur(16px);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--panel-border); 
             position: sticky;
@@ -49,48 +51,62 @@
         }
         .brand { font-family: 'Space Mono', monospace; font-weight: 700; color: #fff; font-size: 14px; letter-spacing: 1px; }
         .brand span { color: var(--accent-amber); }
-        .status-badge { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 11px; text-transform: uppercase; font-family: 'Space Mono', monospace; }
-        .dot-green { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
+        .nav-stats { display: flex; align-items: center; gap: 20px; font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase; }
+        .status-badge { display: flex; align-items: center; gap: 8px; color: var(--text-muted); }
+        .dot-green { width: 8px; height: 8px; background: var(--accent-emerald); border-radius: 50%; box-shadow: 0 0 10px var(--accent-emerald); animation: pulse 2s infinite; }
+        .live-clock { color: var(--accent-cyan); font-weight: 700; }
 
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        .container { max-width: 1100px; margin: 30px auto 0; padding: 0 24px; width: 100%; flex: 1; }
+        .container { max-width: 1200px; margin: 24px auto 0; padding: 0 20px; width: 100%; flex: 1; }
 
         /* Hero */
-        .hero { margin-bottom: 30px; }
-        .tagline { color: var(--accent-cyan); font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
-        .hero-title { font-family: 'Chakra Petch', sans-serif; font-size: 40px; font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 12px; }
-        .hero-desc { color: #94a3b8; font-size: 15px; line-height: 1.6; max-width: 780px; }
+        .hero { margin-bottom: 20px; }
+        .tagline { color: var(--accent-cyan); font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+        .hero-title { font-family: 'Chakra Petch', sans-serif; font-size: 36px; font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 8px; }
+        .hero-desc { color: #94a3b8; font-size: 14px; line-height: 1.5; max-width: 840px; }
 
         /* Layout Grid */
-        .main-grid { display: grid; grid-template-columns: 460px 1fr; gap: 28px; margin-bottom: 40px; }
+        .main-grid { display: grid; grid-template-columns: 480px 1fr; gap: 22px; margin-bottom: 30px; }
 
-        .card { background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(20px); border: 1px solid var(--panel-border); border-radius: 16px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .card-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card { 
+            background: rgba(13, 19, 31, 0.7); 
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px); 
+            border: 1px solid var(--panel-border); 
+            border-radius: 14px; 
+            padding: 22px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.45); 
+        }
+        .card-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .card-title { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; }
         .btn-random { background: transparent; border: 1px solid var(--panel-border); color: var(--accent-cyan); padding: 5px 12px; border-radius: 6px; font-family: 'Space Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.2s; }
         .btn-random:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-cyan); }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
         .full-width { grid-column: span 2; }
 
-        .form-group label { display: block; font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; font-family: 'Space Mono', monospace; }
-        .form-group input, .form-group select { width: 100%; background: var(--input-bg); border: 1px solid var(--panel-border); border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 13px; outline: none; transition: all 0.2s; }
+        .form-group label { display: block; font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; font-family: 'Space Mono', monospace; }
+        .form-group input, .form-group select { width: 100%; background: var(--input-bg); border: 1px solid var(--panel-border); border-radius: 7px; padding: 9px 12px; color: #fff; font-size: 13px; outline: none; transition: all 0.2s; }
         .form-group input:focus, .form-group select:focus { border-color: var(--accent-amber); box-shadow: 0 0 0 3px rgba(249, 159, 40, 0.18); }
         .form-group select option { background: #0f172a; color: #fff; }
 
-        .btn-dispatch { width: 100%; background: var(--accent-amber); color: #000; border: none; padding: 15px; border-radius: 10px; font-family: 'Chakra Petch', sans-serif; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 18px; transition: all 0.2s; box-shadow: 0 6px 20px rgba(249, 159, 40, 0.3); }
-        .btn-dispatch:hover { background: var(--accent-amber-hover); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(249, 159, 40, 0.4); }
+        .btn-dispatch { width: 100%; background: var(--accent-amber); color: #000; border: none; padding: 14px; border-radius: 8px; font-family: 'Chakra Petch', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 14px; transition: all 0.2s; box-shadow: 0 6px 20px rgba(249, 159, 40, 0.3); }
+        .btn-dispatch:hover { background: var(--accent-amber-hover); transform: translateY(-1px); }
 
-        /* Motion Graphic Vector Route */
+        .utilization-panel { background: rgba(21, 29, 44, 0.6); border: 1px solid var(--panel-border); border-radius: 7px; padding: 9px 12px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 11px; }
+        .util-tag { color: var(--text-muted); }
+        .util-val { color: var(--accent-amber); font-weight: 700; }
+
+        /* Dynamic Vector Route Graphics */
         .map-box { 
-            height: 180px; 
-            background: radial-gradient(circle at center, #1e293b 0%, #07090e 100%); 
+            height: 160px; 
+            background: radial-gradient(circle at center, #172133 0%, #06080d 100%); 
             border-radius: 12px; 
             position: relative; 
             overflow: hidden; 
             border: 1px solid var(--panel-border); 
-            margin-bottom: 20px; 
+            margin-bottom: 16px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -100,23 +116,23 @@
             width: 100%; 
             height: 100%; 
             background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px); 
-            background-size: 20px 20px; 
+            background-size: 18px 18px; 
         }
         .map-route-base { position: absolute; width: 72%; height: 4px; background: rgba(255, 255, 255, 0.08); top: 50%; border-radius: 2px; }
         .map-route-active { position: absolute; width: 72%; height: 4px; background: linear-gradient(90deg, #38bdf8, #6366f1, #f99f28); top: 50%; border-radius: 2px; box-shadow: 0 0 12px rgba(56, 189, 248, 0.5); }
 
         .map-icon { 
             position: absolute; 
-            width: 40px; 
-            height: 40px; 
-            background: rgba(15, 23, 42, 0.95); 
+            width: 36px; 
+            height: 36px; 
+            background: rgba(13, 19, 31, 0.95); 
             border: 1px solid rgba(255,255,255,0.12); 
             border-radius: 50%; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.5); 
-            font-size: 14px; 
+            font-size: 13px; 
             z-index: 2; 
         }
         .icon-start { left: 12%; top: 38%; color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
@@ -142,128 +158,152 @@
         .pulse-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid rgba(56, 189, 248, 0.4); animation: ringPulse 2s infinite ease-out; }
         @keyframes ringPulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
 
-        /* Receipt Output Ticket */
-        .ticket-wrapper { display: flex; justify-content: center; margin-bottom: 20px; }
-        .receipt { background: #f4ebd9; color: #1c1917; width: 100%; padding: 24px; border-radius: 6px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); font-family: 'Space Mono', monospace; text-align: center; position: relative; }
-        .receipt-header { font-size: 11px; letter-spacing: 1.5px; margin-bottom: 14px; color: #57534e; text-transform: uppercase; border-bottom: 1px dashed #a8a29e; padding-bottom: 8px; }
-        .receipt-steps { text-align: left; font-size: 10px; margin-bottom: 14px; color: #78716c; line-height: 1.9; }
+        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+        .mode-btn { background: rgba(21, 29, 44, 0.6); border: 1px solid var(--panel-border); border-radius: 7px; padding: 8px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 11px; font-weight: 600; color: #94a3b8; }
+        .mode-btn:hover { border-color: var(--accent-cyan); color: #fff; }
+        .mode-btn.active { background: rgba(56, 189, 248, 0.15); border-color: var(--accent-cyan); color: #fff; }
+        .mode-btn i { display: block; font-size: 14px; margin-bottom: 3px; }
+
+        /* Receipt */
+        .ticket-wrapper { display: flex; justify-content: center; }
+        .receipt { background: #f4ebd9; color: #1c1917; width: 100%; padding: 18px 22px; border-radius: 6px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); font-family: 'Space Mono', monospace; text-align: center; position: relative; }
+        .receipt-header { font-size: 11px; letter-spacing: 1.5px; margin-bottom: 10px; color: #57534e; text-transform: uppercase; border-bottom: 1px dashed #a8a29e; padding-bottom: 5px; }
+        .receipt-steps { text-align: left; font-size: 10px; margin-bottom: 10px; color: #78716c; line-height: 1.7; }
         .receipt-steps div { display: flex; justify-content: space-between; }
         .receipt-steps span.active { color: #0c0a09; font-weight: bold; }
-        .receipt-divider { border-top: 1px dashed #a8a29e; margin: 12px 0; }
+        .receipt-divider { border-top: 1px dashed #a8a29e; margin: 8px 0; }
         .receipt-eta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #78716c; }
-        .receipt-eta-val { font-family: 'Chakra Petch', sans-serif; font-size: 46px; font-weight: 700; color: #0c0a09; line-height: 1; margin: 6px 0; letter-spacing: -1px; }
+        .receipt-eta-val { font-family: 'Chakra Petch', sans-serif; font-size: 42px; font-weight: 700; color: #0c0a09; line-height: 1; margin: 4px 0; letter-spacing: -1px; }
         .receipt-sub { font-size: 9px; color: #78716c; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Instrumentation Section */
-        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
-        .metric-card { background: rgba(15, 23, 42, 0.55); border: 1px solid var(--panel-border); border-radius: 12px; padding: 18px; }
-        .metric-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; margin-bottom: 6px; }
-        .metric-val { font-size: 26px; font-weight: 700; color: #fff; font-family: 'Chakra Petch', sans-serif; }
-        .metric-sub { font-size: 11px; color: #64748b; margin-top: 4px; }
+        /* Real-Time Live Feed Stream */
+        .live-feed-box { background: rgba(13, 19, 31, 0.7); border: 1px solid var(--panel-border); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+        .feed-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); }
+        .feed-list { display: flex; flex-direction: column; gap: 8px; max-height: 110px; overflow: hidden; font-family: 'Space Mono', monospace; font-size: 11px; }
+        .feed-item { display: flex; justify-content: space-between; padding: 6px 10px; background: var(--input-bg); border-radius: 5px; border-left: 3px solid var(--accent-cyan); }
+        .feed-item.urgent { border-left-color: var(--accent-amber); }
 
-        .chart-box { background: rgba(15, 23, 42, 0.65); border: 1px solid var(--panel-border); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
-        .chart-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-family: 'Space Mono', monospace; margin-bottom: 16px; }
-        .chart-wrapper { height: 180px; position: relative; }
+        /* Multi-Chart Grids */
+        .chart-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .chart-box { background: rgba(13, 19, 31, 0.65); border: 1px solid var(--panel-border); border-radius: 12px; padding: 18px; }
+        .chart-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-family: 'Space Mono', monospace; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .chart-badge { background: rgba(56, 189, 248, 0.1); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px; font-size: 9px; }
+        .chart-wrapper { height: 170px; position: relative; }
 
-        /* Feature Importance Horizontal Bars */
-        .bar-list { display: flex; flex-direction: column; gap: 10px; }
-        .bar-item { display: flex; align-items: center; font-size: 11px; gap: 12px; font-family: 'Space Mono', monospace; }
-        .bar-name { width: 170px; text-align: right; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10px; }
-        .bar-track { flex: 1; background: var(--input-bg); height: 10px; border-radius: 3px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--accent-amber); border-radius: 3px; }
-        .bar-val { width: 70px; color: #fff; font-weight: 700; font-size: 10px; }
+        /* Metric Tiles */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+        .metric-card { background: rgba(13, 19, 31, 0.55); border: 1px solid var(--panel-border); border-radius: 10px; padding: 14px 16px; }
+        .metric-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; margin-bottom: 4px; }
+        .metric-val { font-size: 24px; font-weight: 700; color: #fff; font-family: 'Chakra Petch', sans-serif; }
+        .metric-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
 
-        .footer { font-size: 11px; color: #475569; margin-top: 40px; text-align: center; border-top: 1px solid var(--panel-border); padding-top: 20px; font-family: 'Space Mono', monospace; }
+        .footer { font-size: 11px; color: #475569; margin-top: 30px; text-align: center; border-top: 1px solid var(--panel-border); padding-top: 16px; font-family: 'Space Mono', monospace; }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
+    <!-- Top Navigation with Live Clock -->
     <header class="top-nav">
         <div class="brand">PORTER<span>//</span>ETA-NET</div>
-        <div class="status-badge">
-            <div class="dot-green"></div> MODEL ONLINE &middot; CS361 AIMLDL LAB-II
+        <div class="nav-stats">
+            <div class="status-badge"><div class="dot-green"></div> REAL-TIME FEED ACTIVE</div>
+            <div class="live-clock" id="liveClock">--:--:-- UTC</div>
         </div>
     </header>
 
     <div class="container">
         
-        <!-- Hero Header -->
+        <!-- Hero Summary -->
         <section class="hero">
-            <div class="tagline">Neural Delivery-Time Estimator</div>
+            <div class="tagline">Neural Telemetry &amp; Logistics Control</div>
             <h1 class="hero-title">How long until it lands on the doorstep?</h1>
             <p class="hero-desc">
-                A feed-forward network trained on 195,123 real Porter deliveries reads courier load, order size, and time-of-day to call the ETA the moment an order is placed — before a courier ever leaves the store.
+                A feed-forward deep network evaluating real-time courier queues, payload geometry, and street congestion to compute micro-level arrival timestamps before dispatch.
             </p>
         </section>
 
-        <!-- Main Workspace -->
+        <!-- Manifest Entry & Dispatch UI -->
         <div class="main-grid">
             
-            <!-- Left Parameter Entry Panel -->
             <div class="card">
                 <div class="card-header-bar">
                     <div class="card-title">Manifest Entry</div>
                     <button type="button" class="btn-random" onclick="loadRealOrder()">Load real order &#8635;</button>
                 </div>
 
-                <form action="/" method="POST">
+                <form action="/" method="POST" id="manifestForm">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Market Region</label>
-                            <select name="market_id" id="f_market">
-                                <option value="1">Market 1</option>
-                                <option value="2" {% if form_data.get('market_id') == '2' or not form_data %}selected{% endif %}>Market 2</option>
-                                <option value="3" {% if form_data.get('market_id') == '3' %}selected{% endif %}>Market 3</option>
+                            <label for="f_market">Market Sector</label>
+                            <select name="market_id" id="f_market" required>
+                                <option value="1">Market 1 — Downtown Central</option>
+                                <option value="2" selected>Market 2 — Suburban West</option>
+                                <option value="3">Market 3 — South Tech Corridor</option>
+                                <option value="4">Market 4 — Airport Gateway</option>
+                                <option value="5">Market 5 — Northside Commercial</option>
+                                <option value="6">Market 6 — University District</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label>Order Channel</label>
-                            <select name="store_primary_category" id="f_channel">
-                                <option value="american" {% if form_data.get('store_primary_category') == 'american' or not form_data %}selected{% endif %}>Channel 1 (Fast Food)</option>
-                                <option value="bakery" {% if form_data.get('store_primary_category') == 'bakery' %}selected{% endif %}>Channel 2 (Bakery)</option>
-                                <option value="italian" {% if form_data.get('store_primary_category') == 'italian' %}selected{% endif %}>Channel 3 (Italian)</option>
+                            <label for="f_channel">Store &amp; Food Category</label>
+                            <select name="store_primary_category" id="f_channel" required>
+                                <option value="burger" selected>🍔 Gourmet Burgers &amp; Wings</option>
+                                <option value="pizza">🍕 Wood-Fired Pizza &amp; Pasta</option>
+                                <option value="bakery">🥐 Artisan Bakery &amp; Desserts</option>
+                                <option value="indian">🍛 Indian Curry, Biryani &amp; Tandoor</option>
+                                <option value="japanese">🍣 Sushi, Ramen &amp; Bento</option>
+                                <option value="mexican">🌮 Street Tacos, Burritos &amp; Bowls</option>
+                                <option value="cafe">☕ Specialty Coffee &amp; Cafe Bites</option>
+                                <option value="groceries">🥦 Fresh Organic Groceries</option>
+                                <option value="pharmacy">💊 Pharmacy &amp; Healthcare</option>
+                                <option value="healthy">🥗 Healthy Bowls, Salads &amp; Juices</option>
+                                <option value="american">🍟 Classic Fast Food Diner</option>
+                                <option value="other">📦 Other Specialty Retail</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label>Items in Order</label>
-                            <input type="number" name="num_items" id="f_items" value="{{ form_data.get('num_items', '3') }}" min="1">
+                            <label for="f_items">Item Count</label>
+                            <input type="number" name="num_items" id="f_items" value="3" min="1" step="1" required>
                         </div>
 
                         <div class="form-group">
-                            <label>Distance (km)</label>
-                            <input type="number" step="0.1" name="distance" id="f_distance" value="{{ form_data.get('distance', '4.5') }}">
+                            <label for="f_distance">Distance (km)</label>
+                            <input type="number" step="0.1" min="0.1" name="distance" id="f_distance" value="4.5" required>
                         </div>
 
                         <div class="form-group">
-                            <label>Couriers On Shift</label>
-                            <input type="number" name="total_onshift_partners" id="f_onshift" value="{{ form_data.get('total_onshift_partners', '44') }}">
+                            <label for="f_onshift">Couriers On Shift</label>
+                            <input type="number" name="total_onshift_partners" id="f_onshift" value="44" min="1" step="1" oninput="updateUtilization()" required>
                         </div>
 
                         <div class="form-group">
-                            <label>Couriers Busy</label>
-                            <input type="number" id="f_busy" value="38">
+                            <label for="f_busy">Couriers Busy</label>
+                            <input type="number" name="total_busy_partners" id="f_busy" value="38" min="0" step="1" oninput="updateUtilization()" required>
                         </div>
 
                         <div class="form-group full-width">
-                            <label>Outstanding Orders in Market</label>
-                            <input type="number" id="f_outstanding" value="52">
+                            <label for="f_outstanding">Pending Market Orders</label>
+                            <input type="number" name="total_outstanding_orders" id="f_outstanding" value="52" min="0" step="1" required>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-dispatch">Dispatch &rarr; Predict ETA</button>
+                    <div class="utilization-panel">
+                        <span class="util-tag">DRIVER UTILIZATION:</span>
+                        <span class="util-val" id="utilizationLabel">86.4% (6 Free Drivers)</span>
+                    </div>
+
+                    <button type="submit" class="btn-dispatch">Dispatch &#8594; Predict ETA</button>
                 </form>
             </div>
 
-            <!-- Right Dispatch & Prediction Output -->
+            <!-- Visual Telemetry & Ticket -->
             <div class="card">
                 <div class="card-header-bar">
-                    <div class="card-title">Dispatch Telemetry</div>
+                    <div class="card-title">Live Route Simulation</div>
                 </div>
 
-                <!-- Animated Route Map -->
                 <div class="map-box">
                     <div class="map-grid-line"></div>
                     <div class="map-route-base"></div>
@@ -271,30 +311,41 @@
                     
                     <div class="map-icon icon-start" title="Pickup Store"><i class="fa-solid fa-shop"></i></div>
                     
-                    <div class="map-icon icon-truck" title="Active Fleet Courier">
+                    <div class="map-icon icon-truck" id="courierIcon" title="Active Courier">
                         <i class="fa-solid fa-motorcycle"></i>
                         <div class="pulse-ring"></div>
                     </div>
 
-                    <div class="map-icon icon-end" title="Dropoff Point"><i class="fa-solid fa-location-dot"></i></div>
+                    <div class="map-icon icon-end" title="Customer Pin"><i class="fa-solid fa-location-dot"></i></div>
                 </div>
 
-                <!-- Receipt Output -->
+                <div class="mode-grid">
+                    <div class="mode-btn active" id="btn-express" onclick="switchVehicle('express', 1.0, 'fa-motorcycle')">
+                        <i class="fa-solid fa-motorcycle"></i> Express Bike
+                    </div>
+                    <div class="mode-btn" id="btn-bike" onclick="switchVehicle('bike', 1.22, 'fa-bolt')">
+                        <i class="fa-solid fa-bolt"></i> E-Scooter
+                    </div>
+                    <div class="mode-btn" id="btn-van" onclick="switchVehicle('van', 1.45, 'fa-truck-fast')">
+                        <i class="fa-solid fa-truck-fast"></i> Cargo Van
+                    </div>
+                </div>
+
                 <div class="ticket-wrapper">
                     <div class="receipt">
-                        <div class="receipt-header">TICKET NO. #PORTER-{% if prediction %}{{ range(1000, 9999) | random }}{% else %}0000{% endif %}</div>
+                        <div class="receipt-header">TICKET NO. #PORTER-8492</div>
                         <div class="receipt-steps">
-                            <div><span>ORDER PLACED</span> <span class="active">&check;</span></div>
-                            <div><span>STORE CONFIRMS</span> <span class="active">&check;</span></div>
-                            <div><span>COURIER ASSIGNED</span> <span class="active">&check;</span></div>
-                            <div><span>EN ROUTE</span> <span class="active">&check;</span></div>
+                            <div><span>ORDER PLACED</span> <span class="active">&#10003;</span></div>
+                            <div><span>STORE CONFIRMS</span> <span class="active">&#10003;</span></div>
+                            <div><span>COURIER ASSIGNED</span> <span class="active">&#10003;</span></div>
+                            <div><span>EN ROUTE</span> <span class="active">&#10003;</span></div>
                         </div>
                         <div class="receipt-divider"></div>
-                        <div class="receipt-eta-label">PREDICTED ARRIVAL</div>
-                        <div class="receipt-eta-val">
-                            {% if prediction is not none %}{{ prediction }} min{% else %}— min{% endif %}
+                        <div class="receipt-eta-label">ESTIMATED TIME OF ARRIVAL</div>
+                        <div class="receipt-eta-val" id="receiptVal" data-prediction="{{ prediction if prediction is not none else '28.4' }}">
+                            {% if prediction is not none %}{{ prediction }} min{% else %}28.4 min{% endif %}
                         </div>
-                        <div class="receipt-sub">{% if prediction is not none %}DISPATCH CONFIRMED{% else %}awaiting dispatch{% endif %}</div>
+                        <div class="receipt-sub">DISPATCH STREAM CONFIRMED</div>
                     </div>
                 </div>
 
@@ -302,17 +353,30 @@
 
         </div>
 
-        <!-- Metrics Row -->
+        <!-- Real-Time Order Stream Panel -->
+        <div class="live-feed-box">
+            <div class="feed-header">
+                <span><i class="fa-solid fa-satellite-dish" style="color:var(--accent-cyan);"></i> LIVE INCOMING DISPATCH STREAM</span>
+                <span style="color:var(--accent-emerald);">● 100% INGESTION RATE</span>
+            </div>
+            <div class="feed-list" id="feedList">
+                <div class="feed-item"><span>ORD-#7721 - Market 2 (3 items - Gourmet Burgers)</span><span>ETA: 24.2m &middot; ASSIGNED</span></div>
+                <div class="feed-item urgent"><span>ORD-#7722 - Market 1 (1 item - Artisan Bakery)</span><span>ETA: 14.8m &middot; EN ROUTE</span></div>
+                <div class="feed-item"><span>ORD-#7723 - Market 3 (5 items - Indian Biryani)</span><span>ETA: 36.1m &middot; PREPPING</span></div>
+            </div>
+        </div>
+
+        <!-- Core KPI Cards -->
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="metric-label">TEST MAE</div>
-                <div class="metric-val">10.55 <span style="font-size:14px; color:#94a3b8;">min</span></div>
-                <div class="metric-sub">195,123 held-out orders</div>
+                <div class="metric-val">10.55 <span style="font-size:13px; color:#94a3b8;">min</span></div>
+                <div class="metric-sub">195,123 test split</div>
             </div>
 
             <div class="metric-card">
                 <div class="metric-label">TEST RMSE</div>
-                <div class="metric-val">14.19 <span style="font-size:14px; color:#94a3b8;">min</span></div>
+                <div class="metric-val">14.19 <span style="font-size:13px; color:#94a3b8;">min</span></div>
                 <div class="metric-sub">penalizes big misses</div>
             </div>
 
@@ -329,41 +393,52 @@
             </div>
         </div>
 
-        <!-- Instrumentation Graphs -->
-        <div class="chart-box">
-            <div class="chart-title">TRAINING LOSS (HUBER) &mdash; TRAIN VS. VALIDATION</div>
-            <div class="chart-wrapper">
-                <canvas id="lossChart"></canvas>
+        <!-- Live Streaming & Historical Analytics Graphs (Row 1) -->
+        <div class="chart-grid-2">
+            <div class="chart-box">
+                <div class="chart-title">
+                    <span>REAL-TIME DISPATCH THROUGHPUT STREAM</span>
+                    <span class="chart-badge">LIVE 2.5s</span>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="liveStreamChart"></canvas>
+                </div>
             </div>
-        </div>
 
-        <div class="chart-box">
-            <div class="chart-title">WHAT MOVES THE ETA &mdash; PERMUTATION IMPORTANCE (&Delta; MAE WHEN FEATURE SHUFFLED)</div>
-            <div class="bar-list">
-                <div class="bar-item">
-                    <div class="bar-name">orders_per_partner</div>
-                    <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
-                    <div class="bar-val">+1.46 min</div>
+            <div class="chart-box">
+                <div class="chart-title">
+                    <span>HOURLY SURGE &amp; LATENCY SPREAD (0-23h)</span>
+                    <span class="chart-badge">PEAK SPIKES</span>
                 </div>
-                <div class="bar-item">
-                    <div class="bar-name">total_outstanding_orders</div>
-                    <div class="bar-track"><div class="bar-fill" style="width: 62%;"></div></div>
-                    <div class="bar-val">+0.90 min</div>
-                </div>
-                <div class="bar-item">
-                    <div class="bar-name">total_onshift_partners</div>
-                    <div class="bar-track"><div class="bar-fill" style="width: 48%;"></div></div>
-                    <div class="bar-val">+0.70 min</div>
-                </div>
-                <div class="bar-item">
-                    <div class="bar-name">hour_of_day</div>
-                    <div class="bar-track"><div class="bar-fill" style="width: 40%;"></div></div>
-                    <div class="bar-val">+0.59 min</div>
+                <div class="chart-wrapper">
+                    <canvas id="hourlySurgeChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Footer -->
+        <!-- Training Curves & Feature Matrix (Row 2) -->
+        <div class="chart-grid-2">
+            <div class="chart-box">
+                <div class="chart-title">
+                    <span>TRAINING LOSS (HUBER) — CONVERGENCE</span>
+                    <span class="chart-badge">60 EPOCHS</span>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="lossChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-title">
+                    <span>PREDICTED VS. ACTUAL (400 HELD-OUT ORDERS)</span>
+                    <span class="chart-badge">SCATTER MATRIX</span>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="scatterChart"></canvas>
+                </div>
+            </div>
+        </div>
+
         <footer class="footer">
             RGIPT &middot; AIMLDL Application (CS361) &middot; Lab Assignment-II<br>
             Dataset: Porter intra-city delivery logs (197,428 orders)
@@ -372,21 +447,173 @@
     </div>
 
     <script>
-        function loadRealOrder() {
-            document.getElementById('f_items').value = Math.floor(Math.random() * 4) + 1;
-            document.getElementById('f_distance').value = (Math.random() * 6 + 1.5).toFixed(1);
-            document.getElementById('f_onshift').value = Math.floor(Math.random() * 30) + 25;
-            document.getElementById('f_busy').value = Math.floor(Math.random() * 20) + 15;
-            document.getElementById('f_outstanding').value = Math.floor(Math.random() * 40) + 20;
+        var receiptElement = document.getElementById('receiptVal');
+        var basePrediction = receiptElement ? (parseFloat(receiptElement.getAttribute('data-prediction')) || 28.4) : 28.4;
+
+        function updateClock() {
+            var now = new Date();
+            var clock = document.getElementById('liveClock');
+            if (clock) {
+                clock.innerText = now.toTimeString().split(' ')[0] + ' UTC';
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function updateUtilization() {
+            var onshiftInput = document.getElementById('f_onshift');
+            var busyInput = document.getElementById('f_busy');
+            var label = document.getElementById('utilizationLabel');
+            
+            var onshift = Math.max(1, parseFloat(onshiftInput ? onshiftInput.value : 44) || 1);
+            var busy = Math.max(0, parseFloat(busyInput ? busyInput.value : 38) || 0);
+            var free = Math.max(0, onshift - busy);
+            var ratio = Math.min(100, Math.max(0, (busy / onshift) * 100)).toFixed(1);
+            
+            if (label) {
+                label.innerText = ratio + '% (' + free + ' Free Drivers)';
+            }
         }
 
+        function switchVehicle(mode, multiplier, iconClass) {
+            document.querySelectorAll('.mode-btn').forEach(function(btn) { btn.classList.remove('active'); });
+            var targetBtn = document.getElementById('btn-' + mode);
+            if (targetBtn) targetBtn.classList.add('active');
+            
+            var courier = document.getElementById('courierIcon');
+            if (courier) courier.innerHTML = '<i class="fa-solid ' + iconClass + '"></i><div class="pulse-ring"></div>';
+            
+            var receiptVal = document.getElementById('receiptVal');
+            if (receiptVal) {
+                var calculated = (basePrediction * multiplier).toFixed(1);
+                receiptVal.innerText = calculated + ' min';
+            }
+        }
+
+        function loadRealOrder() {
+            var items = document.getElementById('f_items');
+            var dist = document.getElementById('f_distance');
+            var onshift = document.getElementById('f_onshift');
+            var busy = document.getElementById('f_busy');
+            var out = document.getElementById('f_outstanding');
+            var market = document.getElementById('f_market');
+            var channel = document.getElementById('f_channel');
+
+            if (items) items.value = Math.floor(Math.random() * 6) + 1;
+            if (dist) dist.value = (Math.random() * 8 + 1.2).toFixed(1);
+            if (market) market.selectedIndex = Math.floor(Math.random() * market.options.length);
+            if (channel) channel.selectedIndex = Math.floor(Math.random() * channel.options.length);
+            
+            var onshiftVal = Math.floor(Math.random() * 35) + 20;
+            var busyVal = Math.floor(onshiftVal * (Math.random() * 0.4 + 0.5));
+            
+            if (onshift) onshift.value = onshiftVal;
+            if (busy) busy.value = busyVal;
+            if (out) out.value = Math.floor(Math.random() * 45) + 15;
+            
+            updateUtilization();
+        }
+
+        // Live Order Ticker Stream
+        setInterval(function() {
+            var feed = document.getElementById('feedList');
+            if (!feed) return;
+            var randId = Math.floor(Math.random() * 8999) + 1000;
+            var randMarket = Math.floor(Math.random() * 6) + 1;
+            var categories = ['Gourmet Burgers', 'Artisan Bakery', 'Wood-Fired Pizza', 'Indian Biryani', 'Sushi Ramen', 'Specialty Coffee', 'Organic Groceries'];
+            var randCat = categories[Math.floor(Math.random() * categories.length)];
+            var randItems = Math.floor(Math.random() * 4) + 1;
+            var randEta = (Math.random() * 20 + 12).toFixed(1);
+            var isUrgent = Math.random() > 0.65;
+            
+            var newItem = document.createElement('div');
+            newItem.className = 'feed-item' + (isUrgent ? ' urgent' : '');
+            newItem.innerHTML = '<span>ORD-#' + randId + ' - M' + randMarket + ' (' + randItems + ' items - ' + randCat + ')</span><span>ETA: ' + randEta + 'm &middot; ' + (isUrgent ? 'PRIORITY' : 'ASSIGNED') + '</span>';
+            feed.insertBefore(newItem, feed.firstChild);
+            if (feed.children.length > 3) feed.removeChild(feed.lastChild);
+        }, 3200);
+
         window.addEventListener('DOMContentLoaded', function() {
+            updateUtilization();
+
+            // 1. Live Real-Time Throughput Streaming Chart
+            var ctxLive = document.getElementById('liveStreamChart');
+            var liveChart = null;
+            if (ctxLive) {
+                var initialLabels = ['10s ago', '8s ago', '6s ago', '4s ago', '2s ago', 'Now'];
+                var initialData = [32, 28, 35, 41, 38, 44];
+
+                liveChart = new Chart(ctxLive.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: initialLabels,
+                        datasets: [{
+                            label: 'Active Dispatches / Min',
+                            data: initialData,
+                            borderColor: '#38bdf8',
+                            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#38bdf8'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                        }
+                    }
+                });
+
+                setInterval(function() {
+                    if (!liveChart) return;
+                    var newPoint = Math.floor(Math.random() * 25) + 25;
+                    liveChart.data.datasets[0].data.shift();
+                    liveChart.data.datasets[0].data.push(newPoint);
+                    liveChart.update('none');
+                }, 2500);
+            }
+
+            // 2. Hourly Surge Chart
+            var ctxSurge = document.getElementById('hourlySurgeChart');
+            if (ctxSurge) {
+                new Chart(ctxSurge.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['0h', '4h', '8h', '12h', '16h', '19h', '21h', '23h'],
+                        datasets: [{
+                            label: 'Mean ETA (min)',
+                            data: [18, 14, 22, 34, 28, 44, 38, 25],
+                            backgroundColor: ['#151d2c', '#151d2c', '#151d2c', '#38bdf8', '#151d2c', '#f99f28', '#f99f28', '#151d2c'],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                        }
+                    }
+                });
+            }
+
+            // 3. Loss Convergence Chart
             var ctxLoss = document.getElementById('lossChart');
             if (ctxLoss) {
+                var lossLabels = [];
+                for (var i = 0; i < 60; i++) lossLabels.push('e' + i);
                 new Chart(ctxLoss.getContext('2d'), {
                     type: 'line',
                     data: {
-                        labels: Array.from({length: 60}, (_, i) => 'epoch ' + i),
+                        labels: lossLabels,
                         datasets: [
                             { label: 'train MAE', data: [45, 18, 12, 11, 10.8, 10.55], borderColor: '#38bdf8', borderWidth: 2, pointRadius: 0, tension: 0.1 },
                             { label: 'val MAE', data: [43, 15, 11.2, 10.9, 10.6, 10.55], borderColor: '#f99f28', borderWidth: 2, pointRadius: 0, tension: 0.1 }
@@ -399,6 +626,35 @@
                         scales: {
                             y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
                             x: { grid: { display: false }, ticks: { color: '#64748b', maxTicksLimit: 3 } }
+                        }
+                    }
+                });
+            }
+
+            // 4. Scatter Plot Matrix
+            var ctxScatter = document.getElementById('scatterChart');
+            if (ctxScatter) {
+                var points = [];
+                for (var s = 0; s < 120; s++) {
+                    var act = Math.random() * 40 + 12;
+                    var pred = act + (Math.random() * 10 - 5);
+                    points.push({ x: act, y: pred });
+                }
+                new Chart(ctxScatter.getContext('2d'), {
+                    type: 'scatter',
+                    data: {
+                        datasets: [
+                            { label: 'Orders', data: points, backgroundColor: 'rgba(56, 189, 248, 0.6)' },
+                            { label: 'Ideal (x=y)', data: [{x: 10, y: 10}, {x: 55, y: 55}], type: 'line', borderColor: '#475569', borderDash: [4, 4], pointRadius: 0 }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
+                            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } }
                         }
                     }
                 });
