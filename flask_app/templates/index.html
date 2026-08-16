@@ -3,153 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Porter AI — Delivery Time Predictor & Dispatch Console</title>
+    <title>Porter AI — Intra-City Logistics & ETA Intelligence</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="app-container">
-        <!-- Top Navigation -->
+        <!-- Header -->
         <header class="navbar">
             <div class="nav-brand">
                 <i class="fa-solid fa-truck-fast brand-icon"></i>
                 <div class="brand-text">
-                    <span class="brand-title">PORTER <span class="brand-sub">DISPATCH</span></span>
-                    <span class="brand-tag">ETA Estimation & Fleet Monitoring</span>
+                    <span class="brand-title">PORTER <span class="brand-sub">FLEET OPS</span></span>
+                    <span class="brand-tag">Real-Time Indian Logistics & ETA Engine</span>
                 </div>
             </div>
             <div class="nav-status">
                 <div class="status-indicator">
                     <span class="status-dot"></span>
-                    <span class="status-label">Stream: Active (2.5s)</span>
+                    <span class="status-label">Stream: Active</span>
                 </div>
-                <div class="utc-clock" id="utcClock">--:--:-- UTC</div>
+                <div class="utc-clock" id="istClock">--:--:-- IST</div>
             </div>
         </header>
 
-        <!-- Main Header Banner -->
+        <!-- Banner -->
         <div class="hero-section">
-            <div class="hero-badge"><i class="fa-solid fa-microchip"></i> Production ML Inference &middot; Intra-City Logistics</div>
-            <h1 class="hero-title">Intra-City Delivery Time Predictor</h1>
+            <div class="hero-badge"><i class="fa-solid fa-indian-rupee-sign"></i> Pan-India Dispatch &middot; Multi-Vehicle Matrix</div>
+            <h1 class="hero-title">Intra-City Delivery ETA & Dispatch Console</h1>
             <p class="hero-description">
-                A trained deep regression network predicting end-to-end delivery latency in minutes based on real-time partner utilization, market demand, item payloads, and transit dynamics.
+                Predicting end-to-end trip latency and commercial delivery timelines across weather, peak traffic corridors, partner utilization, and cargo volume.
             </p>
         </div>
 
         <!-- Main Workspace Grid -->
         <div class="workspace-grid">
-            <!-- Left: Order Form -->
+            <!-- Order Parameters Form -->
             <div class="card form-card">
                 <div class="card-header">
                     <div class="card-title-group">
-                        <i class="fa-solid fa-clipboard-list header-icon"></i>
-                        <h3>Order & Fleet Parameters</h3>
+                        <i class="fa-solid fa-sliders header-icon"></i>
+                        <h3>Trip & Fleet Parameters</h3>
                     </div>
                     <button type="button" class="btn-secondary-sm" id="btnLoadReal">
-                        <i class="fa-solid fa-dice"></i> Load Sample Order
+                        <i class="fa-solid fa-dice"></i> Sample Scenario
                     </button>
                 </div>
 
                 <form id="predictionForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="market_id">Delivery Market Sector</label>
-                            <select id="market_id" name="market_id" class="form-input">
-                                <option value="1">Market 1 — Metro Core (Downtown)</option>
-                                <option value="2" selected>Market 2 — Suburban West (Urban Hub)</option>
-                                <option value="3">Market 3 — Industrial North</option>
-                                <option value="4">Market 4 — Coastal East (High Density)</option>
-                                <option value="5">Market 5 — South Sector (Commercial)</option>
-                                <option value="6">Market 6 — Tech Corridor (Outskirts)</option>
+                            <label for="market_id">City Sector / Zone</label>
+                            <select id="market_id" class="form-input">
+                                <option value="1">Sector 1 — South Delhi / Connaught Place</option>
+                                <option value="2" selected>Sector 2 — Bengaluru Outer Ring / HSR</option>
+                                <option value="3">Sector 3 — Mumbai Western Express Corridor</option>
+                                <option value="4">Sector 4 — Hyderabad Hitec City / Gachibowli</option>
+                                <option value="5">Sector 5 — Pune Hinjewadi IT Park</option>
+                                <option value="6">Sector 6 — Kolkata Salt Lake / New Town</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="store_primary_category">Store / Restaurant Category</label>
-                            <select id="store_primary_category" name="store_primary_category" class="form-input">
-                                <option value="american" selected>Gourmet Burgers & Fast Casual</option>
-                                <option value="pizza">Wood-Fired Pizza & Italian</option>
-                                <option value="indian">Indian Curry & Biryani Express</option>
-                                <option value="mexican">Mexican Burritos & Tacos</option>
-                                <option value="chinese">Chinese & Wok Kitchen</option>
-                                <option value="japanese">Sushi & Japanese Ramen</option>
-                                <option value="thai">Thai & Southeast Asian</option>
-                                <option value="bakery">Artisan Bakery & Desserts</option>
-                                <option value="salad">Fresh Salads & Healthy Bowls</option>
-                                <option value="sandwich">Deli Sandwiches & Wraps</option>
-                                <option value="breakfast">All-Day Breakfast & Cafe</option>
-                                <option value="other">Grocery & Convenience Retail</option>
+                            <label for="store_primary_category">Goods & Cargo Category</label>
+                            <select id="store_primary_category" class="form-input">
+                                <option value="american" selected>FMCG & Fast Casual Food</option>
+                                <option value="pizza">Bakery & Perishables</option>
+                                <option value="bakery">Industrial Hardware & Spare Parts</option>
+                                <option value="other">Electronics & Consumer Appliances</option>
+                                <option value="indian">Textiles & Apparel Bulk Consignment</option>
+                                <option value="sandwich">Packers & Shifting Parcels</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Weather & Traffic Live Controls -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="traffic_condition"><i class="fa-solid fa-traffic-light"></i> Traffic Congestion</label>
+                            <select id="traffic_condition" class="form-input">
+                                <option value="low">Off-Peak (Free Flow)</option>
+                                <option value="moderate" selected>Moderate Flow (Normal)</option>
+                                <option value="heavy">Heavy (Evening Rush Peak)</option>
+                                <option value="gridlock">Gridlock / High Bottleneck</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="weather_condition"><i class="fa-solid fa-cloud-sun-rain"></i> Weather Condition</label>
+                            <select id="weather_condition" class="form-input">
+                                <option value="clear" selected>Clear / Fair Skies</option>
+                                <option value="mist">Overcast / Light Mist</option>
+                                <option value="monsoon">Heavy Monsoon / Waterlogging</option>
+                                <option value="storm">Severe Storm / Zero Visibility</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="total_items">Total Item Count</label>
-                            <input type="number" id="total_items" name="total_items" class="form-input" min="1" max="30" value="3">
+                            <label for="total_items">Total Package Items (1 – 300)</label>
+                            <input type="number" id="total_items" class="form-input" min="1" max="300" value="4">
                         </div>
                         <div class="form-group">
-                            <label for="subtotal">Order Subtotal ($)</label>
-                            <input type="number" id="subtotal" name="subtotal" class="form-input" min="1" max="500" value="28.50" step="0.50">
+                            <label for="subtotal">Consignment Value (₹50 – ₹1,00,000)</label>
+                            <input type="number" id="subtotal" class="form-input" min="50" max="100000" value="1250" step="50">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="total_onshift_partners">Couriers On Shift</label>
-                            <input type="number" id="total_onshift_partners" name="total_onshift_partners" class="form-input" min="1" max="250" value="45">
+                            <input type="number" id="total_onshift_partners" class="form-input" min="1" max="250" value="45">
                         </div>
                         <div class="form-group">
-                            <label for="total_busy_partners">Couriers Currently Busy</label>
-                            <input type="number" id="total_busy_partners" name="total_busy_partners" class="form-input" min="0" max="250" value="38">
+                            <label for="total_busy_partners">Couriers Active / Busy</label>
+                            <input type="number" id="total_busy_partners" class="form-input" min="0" max="250" value="36">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="total_outstanding_orders">Pending Sector Orders</label>
-                            <input type="number" id="total_outstanding_orders" name="total_outstanding_orders" class="form-input" min="0" max="300" value="52">
+                            <label for="total_outstanding_orders">Pending Regional Orders</label>
+                            <input type="number" id="total_outstanding_orders" class="form-input" min="0" max="300" value="48">
                         </div>
                         <div class="form-group">
-                            <label for="estimated_distance_km">Route Distance (km)</label>
-                            <input type="number" id="estimated_distance_km" name="estimated_distance_km" class="form-input" min="0.1" max="50.0" value="4.5" step="0.1">
+                            <label for="estimated_distance_km">Transit Route Distance (km)</label>
+                            <input type="number" id="estimated_distance_km" class="form-input" min="0.1" max="60.0" value="6.5" step="0.1">
                         </div>
                     </div>
 
-                    <!-- Utilization Metric Bar -->
+                    <!-- Fleet Utilization -->
                     <div class="utilization-box">
                         <div class="utilization-header">
-                            <span>Partner Fleet Utilization</span>
-                            <span id="utilizationLabel" class="utilization-rate">84.4% (7 Free Couriers)</span>
+                            <span>Partner Fleet Load</span>
+                            <span id="utilizationLabel" class="utilization-rate">80.0% (9 Free Drivers)</span>
                         </div>
                         <div class="utilization-bar-bg">
-                            <div id="utilizationFill" class="utilization-bar-fill" style="width: 84.4%;"></div>
+                            <div id="utilizationFill" class="utilization-bar-fill" style="width: 80%;"></div>
                         </div>
                     </div>
 
                     <button type="submit" class="btn-primary" id="btnPredict">
-                        <i class="fa-solid fa-bolt"></i> Calculate Estimated ETA
+                        <i class="fa-solid fa-calculator"></i> Compute ETA & Trip Valuation
                     </button>
                 </form>
             </div>
 
-            <!-- Right: Simulation & Result Card -->
+            <!-- Right Simulation & Results Card -->
             <div class="card result-card">
                 <div class="card-header">
                     <div class="card-title-group">
-                        <i class="fa-solid fa-route header-icon"></i>
-                        <h3>Active Dispatch Simulator</h3>
+                        <i class="fa-solid fa-truck-ramp-box header-icon"></i>
+                        <h3>Vehicle Selector & Simulation</h3>
                     </div>
                 </div>
 
-                <!-- Route Track -->
+                <!-- Porter Indian Fleet Selector -->
+                <div class="fleet-selector-grid">
+                    <button type="button" class="vehicle-btn active" data-vehicle="bike">
+                        <i class="fa-solid fa-motorcycle"></i>
+                        <span>2-Wheeler</span>
+                    </button>
+                    <button type="button" class="vehicle-btn" data-vehicle="tempo">
+                        <i class="fa-solid fa-truck-front"></i>
+                        <span>3-W Tempo</span>
+                    </button>
+                    <button type="button" class="vehicle-btn" data-vehicle="tata_ace">
+                        <i class="fa-solid fa-truck-pickup"></i>
+                        <span>Tata Ace</span>
+                    </button>
+                    <button type="button" class="vehicle-btn" data-vehicle="pickup">
+                        <i class="fa-solid fa-truck"></i>
+                        <span>Pickup 8ft</span>
+                    </button>
+                </div>
+
+                <!-- Animated Route Tracker -->
                 <div class="route-track-container">
                     <div class="track-node start-node">
-                        <i class="fa-solid fa-store"></i>
-                        <span>Merchant</span>
+                        <i class="fa-solid fa-warehouse"></i>
+                        <span>Origin</span>
                     </div>
                     <div class="track-line">
                         <div class="track-progress" id="trackProgress"></div>
@@ -158,54 +194,41 @@
                         </div>
                     </div>
                     <div class="track-node end-node">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>Customer</span>
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                        <span>Destination</span>
                     </div>
                 </div>
 
-                <!-- Vehicle Selector -->
-                <div class="vehicle-switcher">
-                    <button type="button" class="vehicle-btn active" data-vehicle="bike">
-                        <i class="fa-solid fa-motorcycle"></i> Express Bike
-                    </button>
-                    <button type="button" class="vehicle-btn" data-vehicle="scooter">
-                        <i class="fa-solid fa-bolt"></i> E-Scooter
-                    </button>
-                    <button type="button" class="vehicle-btn" data-vehicle="van">
-                        <i class="fa-solid fa-van-shuttle"></i> Cargo Van
-                    </button>
-                </div>
-
-                <!-- Result Summary Box -->
+                <!-- Output Summary -->
                 <div class="prediction-summary-card">
                     <div class="summary-top">
-                        <div class="ticket-id" id="dispatchId">ORDER #POR-8492</div>
-                        <div class="status-pill ready" id="statusPill">INSPECTION READY</div>
+                        <div class="ticket-id" id="dispatchId">WAYBILL #POR-8910</div>
+                        <div class="fare-tag" id="fareTag">Est. Fare: ₹125</div>
                     </div>
                     <div class="summary-body">
                         <div class="summary-metric">
-                            <span class="metric-label">Estimated Delivery ETA</span>
+                            <span class="metric-label">Estimated Transit Time</span>
                             <div class="eta-value-wrap">
-                                <span class="eta-number" id="etaMinutes">28.4</span>
-                                <span class="eta-unit">minutes</span>
+                                <span class="eta-number" id="etaMinutes">26.8</span>
+                                <span class="eta-unit">mins</span>
                             </div>
                         </div>
                         <div class="breakdown-grid">
                             <div class="breakdown-item">
-                                <span class="b-title">Kitchen Prep:</span>
-                                <span class="b-val" id="prepTime">14.0 min</span>
+                                <span class="b-title">Handling / Loading:</span>
+                                <span class="b-val" id="prepTime">11.2 min</span>
                             </div>
                             <div class="breakdown-item">
-                                <span class="b-title">Transit Time:</span>
-                                <span class="b-val" id="transitTime">14.4 min</span>
+                                <span class="b-title">Transit Duration:</span>
+                                <span class="b-val" id="transitTime">15.6 min</span>
                             </div>
                             <div class="breakdown-item">
-                                <span class="b-title">Traffic Factor:</span>
-                                <span class="b-val" id="trafficFactor">Moderate (1.1x)</span>
+                                <span class="b-title">Traffic Impact:</span>
+                                <span class="b-val" id="trafficFactor">Moderate</span>
                             </div>
                             <div class="breakdown-item">
-                                <span class="b-title">Confidence:</span>
-                                <span class="b-val" id="confidenceVal">94.2%</span>
+                                <span class="b-title">Model Reliability:</span>
+                                <span class="b-val" id="confidenceVal">95.4%</span>
                             </div>
                         </div>
                     </div>
@@ -218,18 +241,18 @@
             <div class="card-header">
                 <div class="card-title-group">
                     <i class="fa-solid fa-tower-broadcast header-icon"></i>
-                    <h3>Live Order Intake & ETA Stream</h3>
+                    <h3>Live Pan-India Dispatch Intake</h3>
                 </div>
-                <span class="stream-rate-badge"><i class="fa-solid fa-circle-check"></i> Ingestion: 100% OK</span>
+                <span class="stream-rate-badge"><i class="fa-solid fa-circle-check"></i> Gateway Live</span>
             </div>
             <div class="stream-table-wrap">
                 <table class="stream-table">
                     <thead>
                         <tr>
-                            <th>Order ID</th>
-                            <th>Market Sector</th>
-                            <th>Category</th>
-                            <th>Payload</th>
+                            <th>Waybill</th>
+                            <th>Regional Zone</th>
+                            <th>Consignment Category</th>
+                            <th>Payload / Value</th>
                             <th>Distance</th>
                             <th>Predicted ETA</th>
                             <th>Status</th>
@@ -237,112 +260,129 @@
                     </thead>
                     <tbody id="streamTbody">
                         <tr>
-                            <td><code>#POR-4820</code></td>
-                            <td>Market 2 — Suburban West</td>
-                            <td>Gourmet Burgers & Fast Casual</td>
-                            <td>3 items ($28.50)</td>
-                            <td>4.5 km</td>
-                            <td><strong>28.4 min</strong></td>
+                            <td><code>#POR-5120</code></td>
+                            <td>Bengaluru — HSR Outer Ring</td>
+                            <td>FMCG & Fast Casual Food</td>
+                            <td>4 items (₹1,250)</td>
+                            <td>6.5 km</td>
+                            <td><strong>26.8 min</strong></td>
                             <td><span class="badge-tag assigned">DISPATCHED</span></td>
                         </tr>
                         <tr>
-                            <td><code>#POR-4819</code></td>
-                            <td>Market 1 — Metro Core</td>
-                            <td>Wood-Fired Pizza & Italian</td>
-                            <td>2 items ($22.00)</td>
-                            <td>3.2 km</td>
-                            <td><strong>24.1 min</strong></td>
-                            <td><span class="badge-tag assigned">DISPATCHED</span></td>
+                            <td><code>#POR-5119</code></td>
+                            <td>Delhi — Connaught Place</td>
+                            <td>Electronics & Appliances</td>
+                            <td>12 items (₹34,000)</td>
+                            <td>14.2 km</td>
+                            <td><strong>48.2 min</strong></td>
+                            <td><span class="badge-tag in-transit">IN TRANSIT</span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Analytics & Model Instrumentation Metrics -->
+        <!-- Performance Metrics Matrix -->
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="m-title">Test MAE</div>
                 <div class="m-value">{{ metrics.test_mae if metrics else '10.55' }} <span class="m-unit">min</span></div>
-                <div class="m-sub">Held-out evaluation split</div>
+                <div class="m-sub">Validation split error</div>
             </div>
             <div class="metric-card">
                 <div class="m-title">Test RMSE</div>
                 <div class="m-value">{{ metrics.test_rmse if metrics else '14.19' }} <span class="m-unit">min</span></div>
-                <div class="m-sub">Penalizes large tail variance</div>
+                <div class="m-sub">Large deviation penalty</div>
             </div>
             <div class="metric-card">
                 <div class="m-title">Variance Explained ($R^2$)</div>
                 <div class="m-value">{{ metrics.r2_score if metrics else '0.274' }}</div>
-                <div class="m-sub">Non-linear latency fit</div>
+                <div class="m-sub">Non-linear dynamics fit</div>
             </div>
             <div class="metric-card">
-                <div class="m-title">Performance vs Baseline</div>
+                <div class="m-title">vs Baseline</div>
                 <div class="m-value text-success">{{ metrics.pct_improvement if metrics else '-19.2' }}%</div>
-                <div class="m-sub">Outperforms naïve baseline (13.06 min)</div>
+                <div class="m-sub">Outperforms naïve 13.0 min mean</div>
             </div>
         </div>
 
-        <!-- Telemetry Graphs -->
+        <!-- Visual Telemetry & Analysis Charts -->
         <div class="charts-grid">
             <div class="card chart-card">
                 <div class="card-header">
-                    <h4>Real-Time Dispatch Throughput (Rolling 10s)</h4>
-                    <span class="badge-pill">Live Telemetry</span>
+                    <h4>Rolling Active Fleet Throughput</h4>
+                    <span class="badge-pill">Live 2.5s Stream</span>
                 </div>
-                <div class="chart-wrapper">
-                    <canvas id="liveThroughputChart"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="liveThroughputChart"></canvas></div>
             </div>
             <div class="card chart-card">
                 <div class="card-header">
-                    <h4>Hourly Delivery Latency Distribution (0–23h)</h4>
-                    <span class="badge-pill">Trained Profile</span>
+                    <h4>Hourly Congestion & Latency Surge (0–23h)</h4>
+                    <span class="badge-pill">Peak Matrix</span>
                 </div>
-                <div class="chart-wrapper">
-                    <canvas id="hourlySurgeChart"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="hourlySurgeChart"></canvas></div>
             </div>
             <div class="card chart-card">
                 <div class="card-header">
-                    <h4>Training Loss Convergence (Huber Loss)</h4>
+                    <h4>Loss Convergence (Huber Loss)</h4>
                     <span class="badge-pill">60 Epochs</span>
                 </div>
-                <div class="chart-wrapper">
-                    <canvas id="lossChart"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="lossChart"></canvas></div>
             </div>
             <div class="card chart-card">
                 <div class="card-header">
-                    <h4>Predicted vs. Actual Target Comparison (400 Samples)</h4>
-                    <span class="badge-pill">Test Matrix</span>
+                    <h4>Predicted vs. Actual Target Latency (400 Test Splits)</h4>
+                    <span class="badge-pill">Held-Out Set</span>
                 </div>
-                <div class="chart-wrapper">
-                    <canvas id="scatterChart"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="scatterChart"></canvas></div>
             </div>
         </div>
 
-        <!-- Enterprise Footer -->
+        <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
-                <span>&copy; 2026 Karunendra. All Rights Reserved. &middot; Porter AI Delivery Intelligence</span>
-                <span class="footer-meta">RGIPT &middot; AIMLDL Application (CS361) &middot; Lab Assignment-II</span>
+                <span>&copy; 2026 Karunendra &middot; Porter AI Delivery Intelligence</span>
+                <span class="footer-meta">RGIPT &middot; CS361 Machine Learning Project</span>
             </div>
         </footer>
     </div>
 
-    <!-- Script Configuration -->
+    <!-- Frontend Interactive Logic -->
     <script>
-        // Update UTC Clock
+        // IST Clock
         function updateClock() {
             const now = new Date();
-            document.getElementById('utcClock').textContent = now.toUTCString().split(' ')[4] + ' UTC';
+            document.getElementById('istClock').textContent = now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST';
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Calculate and Render Utilization Bar
+        // Selected Vehicle State
+        let selectedVehicle = 'bike';
+        const vehicleIcon = document.getElementById('vehicleIcon');
+        const vehicleButtons = document.querySelectorAll('.vehicle-btn');
+
+        const vehicleIconsMap = {
+            'bike': 'fa-solid fa-motorcycle',
+            'tempo': 'fa-solid fa-truck-front',
+            'tata_ace': 'fa-solid fa-truck-pickup',
+            'pickup': 'fa-solid fa-truck'
+        };
+
+        // Vehicle Switcher with Instant Recalculation
+        vehicleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                vehicleButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedVehicle = btn.getAttribute('data-vehicle');
+                vehicleIcon.className = vehicleIconsMap[selectedVehicle];
+                
+                // Immediately recalculate on click
+                triggerPrediction();
+            });
+        });
+
+        // Fleet Utilization Bar
         function updateUtilization() {
             const onshift = parseFloat(document.getElementById('total_onshift_partners').value) || 1;
             const busy = parseFloat(document.getElementById('total_busy_partners').value) || 0;
@@ -354,36 +394,31 @@
             const label = document.getElementById('utilizationLabel');
 
             fill.style.width = Math.min(rate, 100) + '%';
-            label.textContent = `${rate}% (${free} Free Couriers)`;
-
-            if (rate > 90) {
-                fill.style.backgroundColor = '#ef4444';
-            } else if (rate > 70) {
-                fill.style.backgroundColor = '#f97316';
-            } else {
-                fill.style.backgroundColor = '#10b981';
-            }
+            label.textContent = `${rate}% (${free} Free Drivers)`;
+            fill.style.backgroundColor = rate > 90 ? '#ef4444' : (rate > 70 ? '#f97316' : '#10b981');
         }
         document.getElementById('total_onshift_partners').addEventListener('input', updateUtilization);
         document.getElementById('total_busy_partners').addEventListener('input', updateUtilization);
         updateUtilization();
 
-        // Form Submit & Real-Time Prediction
-        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        // Reusable Prediction Trigger
+        async function triggerPrediction() {
             const btn = document.getElementById('btnPredict');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Computing Inference...';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Calculating Fleet Physics...';
 
             const payload = {
                 market_id: parseInt(document.getElementById('market_id').value),
                 store_primary_category: document.getElementById('store_primary_category').value,
-                total_items: parseInt(document.getElementById('total_items').value),
-                subtotal: parseFloat(document.getElementById('subtotal').value),
-                total_onshift_partners: parseInt(document.getElementById('total_onshift_partners').value),
-                total_busy_partners: parseInt(document.getElementById('total_busy_partners').value),
-                total_outstanding_orders: parseInt(document.getElementById('total_outstanding_orders').value),
-                estimated_distance_km: parseFloat(document.getElementById('estimated_distance_km').value)
+                traffic_condition: document.getElementById('traffic_condition').value,
+                weather_condition: document.getElementById('weather_condition').value,
+                vehicle_type: selectedVehicle,
+                total_items: parseInt(document.getElementById('total_items').value) || 1,
+                subtotal: parseFloat(document.getElementById('subtotal').value) || 50,
+                total_onshift_partners: parseInt(document.getElementById('total_onshift_partners').value) || 1,
+                total_busy_partners: parseInt(document.getElementById('total_busy_partners').value) || 0,
+                total_outstanding_orders: parseInt(document.getElementById('total_outstanding_orders').value) || 0,
+                estimated_distance_km: parseFloat(document.getElementById('estimated_distance_km').value) || 1.0
             };
 
             try {
@@ -394,14 +429,15 @@
                 });
                 const data = await res.json();
                 
-                const eta = data.predicted_eta || 28.4;
+                const eta = data.predicted_eta || 26.8;
                 document.getElementById('etaMinutes').textContent = Number(eta).toFixed(1);
-                document.getElementById('prepTime').textContent = `${data.prep_time || (eta * 0.48).toFixed(1)} min`;
-                document.getElementById('transitTime').textContent = `${data.transit_time || (eta * 0.52).toFixed(1)} min`;
-                document.getElementById('trafficFactor').textContent = data.traffic_factor || "Moderate (1.1x)";
-                document.getElementById('confidenceVal').textContent = `${data.confidence || 94.2}%`;
-                
-                // Animate vehicle track
+                document.getElementById('prepTime').textContent = `${data.prep_time} min`;
+                document.getElementById('transitTime').textContent = `${data.transit_time} min`;
+                document.getElementById('trafficFactor').textContent = `${data.traffic_applied}`;
+                document.getElementById('confidenceVal').textContent = `${data.confidence}%`;
+                document.getElementById('fareTag').textContent = `Est. Fare: ₹${data.estimated_fare_inr}`;
+
+                // Route Animation
                 const vehicle = document.getElementById('trackVehicle');
                 const progress = document.getElementById('trackProgress');
                 vehicle.style.left = '0%';
@@ -414,18 +450,18 @@
                     progress.style.width = '90%';
                 }, 100);
 
-                // Add to live stream table
+                // Prepend to Stream Table
                 const tbody = document.getElementById('streamTbody');
-                const orderId = '#POR-' + Math.floor(1000 + Math.random() * 9000);
-                const marketText = document.getElementById('market_id').options[document.getElementById('market_id').selectedIndex].text.split('—')[0].trim();
+                const waybill = '#POR-' + Math.floor(1000 + Math.random() * 9000);
+                const zoneText = document.getElementById('market_id').options[document.getElementById('market_id').selectedIndex].text;
                 const catText = document.getElementById('store_primary_category').options[document.getElementById('store_primary_category').selectedIndex].text;
                 
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td><code>${orderId}</code></td>
-                    <td>${marketText}</td>
+                    <td><code>${waybill}</code></td>
+                    <td>${zoneText.split('—')[1] || zoneText}</td>
                     <td>${catText}</td>
-                    <td>${payload.total_items} items ($${payload.subtotal.toFixed(2)})</td>
+                    <td>${payload.total_items} items (₹${payload.subtotal.toLocaleString('en-IN')})</td>
                     <td>${payload.estimated_distance_km} km</td>
                     <td><strong>${Number(eta).toFixed(1)} min</strong></td>
                     <td><span class="badge-tag assigned">DISPATCHED</span></td>
@@ -437,51 +473,57 @@
                 console.error(err);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Calculate Estimated ETA';
+                btn.innerHTML = '<i class="fa-solid fa-calculator"></i> Compute ETA & Trip Valuation';
             }
+        }
+
+        // Form Submit Handler
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            triggerPrediction();
         });
 
-        // Sample Order Generator
-        const sampleOrders = [
-            { market: 1, cat: 'pizza', items: 2, sub: 24.50, onshift: 35, busy: 28, orders: 40, dist: 3.2 },
-            { market: 2, cat: 'american', items: 4, sub: 38.00, onshift: 50, busy: 44, orders: 60, dist: 5.5 },
-            { market: 3, cat: 'bakery', items: 1, sub: 12.00, onshift: 25, busy: 10, orders: 15, dist: 2.1 },
-            { market: 5, cat: 'indian', items: 5, sub: 52.00, onshift: 60, busy: 54, orders: 75, dist: 7.4 }
+        // Instant Live Auto-Recalculate on Any Form Field Change
+        ['traffic_condition', 'weather_condition', 'market_id', 'store_primary_category'].forEach(id => {
+            document.getElementById(id).addEventListener('change', triggerPrediction);
+        });
+
+        // Scenario Preset Generator
+        const scenarios = [
+            { zone: 2, cat: 'american', traffic: 'heavy', weather: 'monsoon', vehicle: 'bike', items: 3, val: 650, onshift: 50, busy: 46, orders: 65, dist: 5.4 },
+            { zone: 3, cat: 'bakery', traffic: 'moderate', weather: 'clear', vehicle: 'tata_ace', items: 45, val: 28500, onshift: 30, busy: 22, orders: 35, dist: 18.0 },
+            { zone: 1, cat: 'other', traffic: 'gridlock', weather: 'clear', vehicle: 'pickup', items: 120, val: 84000, onshift: 25, busy: 24, orders: 40, dist: 22.5 },
+            { zone: 4, cat: 'indian', traffic: 'low', weather: 'clear', vehicle: 'tempo', items: 15, val: 4200, onshift: 40, busy: 18, orders: 20, dist: 8.2 }
         ];
 
         document.getElementById('btnLoadReal').addEventListener('click', () => {
-            const random = sampleOrders[Math.floor(Math.random() * sampleOrders.length)];
-            document.getElementById('market_id').value = random.market;
-            document.getElementById('store_primary_category').value = random.cat;
-            document.getElementById('total_items').value = random.items;
-            document.getElementById('subtotal').value = random.sub.toFixed(2);
-            document.getElementById('total_onshift_partners').value = random.onshift;
-            document.getElementById('total_busy_partners').value = random.busy;
-            document.getElementById('total_outstanding_orders').value = random.orders;
-            document.getElementById('estimated_distance_km').value = random.dist;
-            updateUtilization();
+            const sc = scenarios[Math.floor(Math.random() * scenarios.length)];
+            document.getElementById('market_id').value = sc.zone;
+            document.getElementById('store_primary_category').value = sc.cat;
+            document.getElementById('traffic_condition').value = sc.traffic;
+            document.getElementById('weather_condition').value = sc.weather;
+            document.getElementById('total_items').value = sc.items;
+            document.getElementById('subtotal').value = sc.val;
+            document.getElementById('total_onshift_partners').value = sc.onshift;
+            document.getElementById('total_busy_partners').value = sc.busy;
+            document.getElementById('total_outstanding_orders').value = sc.orders;
+            document.getElementById('estimated_distance_km').value = sc.dist;
+            
+            const targetBtn = document.querySelector(`.vehicle-btn[data-vehicle="${sc.vehicle}"]`);
+            if (targetBtn) {
+                targetBtn.click();
+            } else {
+                updateUtilization();
+                triggerPrediction();
+            }
         });
 
-        // Vehicle Switcher Logic
-        const vehicleButtons = document.querySelectorAll('.vehicle-btn');
-        const vehicleIcon = document.getElementById('vehicleIcon');
-        vehicleButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                vehicleButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const v = btn.getAttribute('data-vehicle');
-                if (v === 'bike') vehicleIcon.className = 'fa-solid fa-motorcycle';
-                if (v === 'scooter') vehicleIcon.className = 'fa-solid fa-bolt';
-                if (v === 'van') vehicleIcon.className = 'fa-solid fa-van-shuttle';
-            });
-        });
-
-        // ------------------ CHART.JS CONFIGURATIONS (LIGHT THEME) ------------------
+        // ------------------ CHART.JS (LIGHT THEME) ------------------
         Chart.defaults.color = '#475569';
         Chart.defaults.borderColor = 'rgba(226, 232, 240, 0.8)';
         Chart.defaults.font.family = "'Inter', sans-serif";
 
-        // 1. Live Telemetry Stream with Momentum Drift
+        // 1. Throughput Chart
         const tpCtx = document.getElementById('liveThroughputChart').getContext('2d');
         const throughputChart = new Chart(tpCtx, {
             type: 'line',
@@ -524,12 +566,12 @@
             throughputChart.update('none');
         }, 2500);
 
-        // 2. Hourly Surge Latency Distribution (from Model Dataset)
+        // 2. Hourly Peak Latency
         const surgeCtx = document.getElementById('hourlySurgeChart').getContext('2d');
         new Chart(surgeCtx, {
             type: 'bar',
             data: {
-                labels: ['0h', '4h', '8h', '12h (Lunch)', '16h', '19h (Dinner)', '21h', '23h'],
+                labels: ['0h', '4h', '8h', '12h (Lunch)', '16h', '19h (Dinner Peak)', '21h', '23h'],
                 datasets: [{
                     label: 'Mean Latency (min)',
                     data: [18.4, 15.2, 22.1, 34.6, 26.3, 42.1, 36.8, 24.5],
@@ -548,7 +590,7 @@
             }
         });
 
-        // 3. Huber Loss Convergence (Trained 60 Epochs)
+        // 3. Huber Loss
         const lossCtx = document.getElementById('lossChart').getContext('2d');
         new Chart(lossCtx, {
             type: 'line',
@@ -570,7 +612,7 @@
             }
         });
 
-        // 4. Test Split Evaluation Scatter Plot
+        // 4. Test Split Scatter
         const scatterCtx = document.getElementById('scatterChart').getContext('2d');
         const scatterPoints = Array.from({length: 40}, () => {
             const actual = 15 + Math.random() * 45;

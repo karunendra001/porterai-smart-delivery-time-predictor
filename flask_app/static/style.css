@@ -150,7 +150,7 @@ body {
 .hero-description {
     color: var(--text-muted);
     font-size: 0.95rem;
-    max-width: 820px;
+    max-width: 860px;
 }
 
 /* Workspace Grid */
@@ -330,6 +330,52 @@ body {
     background: #dbeafe;
 }
 
+/* Fleet Selector Grid */
+.fleet-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 580px) {
+    .fleet-selector-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.vehicle-btn {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    color: #64748b;
+    padding: 10px 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.15s ease;
+}
+
+.vehicle-btn i {
+    font-size: 1.15rem;
+}
+
+.vehicle-btn:hover {
+    background: var(--bg-input);
+    color: var(--text-main);
+}
+
+.vehicle-btn.active {
+    background: var(--accent-blue-light);
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
 /* Route Simulator */
 .route-track-container {
     display: flex;
@@ -391,41 +437,6 @@ body {
     box-shadow: 0 3px 8px rgba(37, 99, 235, 0.35);
 }
 
-/* Vehicle Switcher */
-.vehicle-switcher {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 16px;
-}
-
-.vehicle-btn {
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    color: #64748b;
-    padding: 10px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: all 0.15s ease;
-}
-
-.vehicle-btn:hover {
-    background: var(--bg-input);
-    color: var(--text-main);
-}
-
-.vehicle-btn.active {
-    background: var(--accent-blue-light);
-    border-color: var(--primary-blue);
-    color: var(--primary-blue);
-}
-
 /* Summary Card */
 .prediction-summary-card {
     background: #ffffff;
@@ -451,17 +462,14 @@ body {
     color: var(--primary-blue);
 }
 
-.status-pill {
-    font-size: 0.72rem;
+.fare-tag {
+    font-size: 0.85rem;
     font-weight: 700;
+    color: var(--accent-orange);
+    background: var(--accent-orange-light);
+    border: 1px solid rgba(249, 115, 22, 0.25);
     padding: 3px 10px;
     border-radius: 9999px;
-}
-
-.status-pill.ready {
-    background: var(--accent-green-light);
-    color: var(--accent-green);
-    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .summary-metric {
