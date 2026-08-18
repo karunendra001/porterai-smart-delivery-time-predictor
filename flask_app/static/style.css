@@ -11,7 +11,6 @@
     --text-muted: #64748b;
     --accent-green: #10b981;
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
 }
 
 * {
@@ -77,6 +76,20 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.ev-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: #ecfdf5;
+    color: var(--accent-green);
+    padding: 5px 12px;
+    border-radius: 9999px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .status-indicator {
@@ -242,7 +255,7 @@ body {
     cursor: pointer;
 }
 
-/* Dispatch Simulator Card */
+/* Dispatch Visualizer */
 .dispatch-visualizer {
     display: flex;
     align-items: center;
@@ -295,7 +308,7 @@ body {
 
 .vehicle-picker {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     margin-bottom: 16px;
 }
@@ -303,12 +316,13 @@ body {
 .vehicle-btn {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    padding: 8px;
+    padding: 8px 4px;
     border-radius: 6px;
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     font-weight: 600;
     color: var(--text-muted);
     cursor: pointer;
+    text-align: center;
 }
 
 .vehicle-btn.active {
@@ -317,12 +331,13 @@ body {
     color: var(--primary-blue);
 }
 
-/* ETA Screen */
+/* ETA Display Screen */
 .eta-screen {
     background: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 18px;
+    margin-bottom: 14px;
 }
 
 .eta-meta {
@@ -372,6 +387,17 @@ body {
     color: var(--accent-orange);
 }
 
+.fare-highlight {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.85rem;
+    background: #fff7ed;
+    color: var(--accent-orange);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-top: 4px;
+}
+
 .eta-metrics-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -386,6 +412,195 @@ body {
     display: flex;
     justify-content: space-between;
     color: #475569;
+}
+
+/* ESG CO2 Metric */
+.co2-metric-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-input);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+}
+
+.co2-metric-box.green {
+    background: #ecfdf5;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.co2-icon {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.co2-metric-box.green .co2-icon {
+    color: var(--accent-green);
+}
+
+.co2-title {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.co2-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+/* Multi-Stop Schedule */
+.multi-stop-box {
+    background: var(--bg-input);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+}
+
+.ms-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #475569;
+}
+
+.ms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.ms-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    background: #ffffff;
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+
+/* Factor Decomposition */
+.factor-breakdown-container {
+    margin-bottom: 14px;
+}
+
+.factor-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.factor-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.factor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.factor-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-input);
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+}
+
+.factor-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.factor-icon-wrap {
+    color: var(--primary-blue);
+}
+
+.factor-name {
+    font-weight: 700;
+}
+
+.factor-desc {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.factor-time {
+    font-weight: 700;
+    color: var(--accent-orange);
+}
+
+/* Economics Dropdown */
+.economics-dropdown {
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+    font-size: 0.8rem;
+}
+
+.economics-dropdown summary {
+    font-weight: 700;
+    cursor: pointer;
+    color: #475569;
+}
+
+.economics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+    background: var(--bg-input);
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.eco-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+}
+
+/* Map Card */
+.leaflet-container-box {
+    height: 280px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.map-vehicle-dot {
+    background: var(--primary-blue);
+    color: white;
+    padding: 6px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+/* Batch Card */
+.batch-card {
+    margin-bottom: 24px;
+}
+
+.batch-summary-strip {
+    display: flex;
+    gap: 24px;
+    background: var(--accent-blue-light);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
 }
 
 /* Live Table Stream */
@@ -495,6 +710,7 @@ body {
 }
 
 .chart-wrapper {
-    height: 200px;
+    height: 220px;
     position: relative;
+    width: 100%;
 }
